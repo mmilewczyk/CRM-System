@@ -1,6 +1,6 @@
 package com.agiklo.oracledatabase.controller;
 
-import com.agiklo.oracledatabase.entity.discussions.Post;
+import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.service.PostService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;

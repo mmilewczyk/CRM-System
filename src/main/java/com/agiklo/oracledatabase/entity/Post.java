@@ -1,6 +1,5 @@
-package com.agiklo.oracledatabase.entity.discussions;
+package com.agiklo.oracledatabase.entity;
 
-import com.agiklo.oracledatabase.entity.Employee;
 import lombok.*;
 
 import javax.persistence.*;

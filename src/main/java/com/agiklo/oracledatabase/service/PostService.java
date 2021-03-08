@@ -1,7 +1,7 @@
 package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Employee;
-import com.agiklo.oracledatabase.entity.discussions.Post;
+import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
 import javassist.NotFoundException;
