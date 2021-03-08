@@ -1,6 +1,7 @@
 package com.agiklo.oracledatabase.controller;
 
 import com.agiklo.oracledatabase.entity.SellingInvoice;
+import com.agiklo.oracledatabase.entity.dto.SellingInvoiceDTO;
 import com.agiklo.oracledatabase.service.SellingInvoiceService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.agiklo.oracledatabase.controller.ApiMapping.INVOICES_REST_URL;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping(produces="application/json", path = INVOICES_REST_URL)
@@ -22,17 +24,13 @@ public class SellingInvoiceController {
     private final SellingInvoiceService sellingInvoiceService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<SellingInvoice> getAllSellingInvoices(){
-        return sellingInvoiceService.getAllSellingInvoices();
+    public ResponseEntity<List<SellingInvoiceDTO>> getAllSellingInvoices(){
+        return status(HttpStatus.OK).body(sellingInvoiceService.getAllSellingInvoices());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SellingInvoice> getInvoiceById(@PathVariable("id") Long id){
-        Optional<SellingInvoice> optionalSellingInvoice = sellingInvoiceService.getInvoiceById(id);
-        return optionalSellingInvoice
-                .map(invoice -> new ResponseEntity<>(invoice, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<SellingInvoiceDTO> getInvoiceById(@PathVariable("id") Long id){
+        return status(HttpStatus.OK).body(sellingInvoiceService.getInvoiceById(id));
     }
 
     @PostMapping(consumes="application/json")

@@ -8,6 +8,7 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final EmployeeRepository employeeRepository;
 
+    @Transactional(readOnly = true)
     public List<Post> getAllPosts(){
         return postRepository.findAll();
     }
@@ -43,10 +45,12 @@ public class PostService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Optional<Post> getPostById(Long id) {
         return postRepository.findById(id);
     }
 
+    @Transactional(readOnly = true)
     public Set<Post> findPostsByAuthorFirstnameAndLastname(String firstName, String lastName) throws NotFoundException {
         try {
             return postRepository.findPostByAuthorFirstNameAndAuthorLastName(firstName, lastName);

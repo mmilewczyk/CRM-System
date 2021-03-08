@@ -1,12 +1,17 @@
 package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Departments;
+import com.agiklo.oracledatabase.entity.dto.DepartmentDTO;
 import com.agiklo.oracledatabase.exports.ExportDepartmentsToPDF;
+import com.agiklo.oracledatabase.mapper.DepartmentMapper;
 import com.agiklo.oracledatabase.repository.DepartmentsRepository;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,20 +19,28 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class DepartmentService {
 
     private final DepartmentsRepository departmentsRepository;
+    private final DepartmentMapper departmentMapper;
 
-    public List<Departments> getAllDepartments(){
-        return departmentsRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<DepartmentDTO> getAllDepartments(){
+        return departmentsRepository.findAll()
+                .stream()
+                .map(departmentMapper::mapDepartmentToDto)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Departments> getDepartmentById(Long id) {
-        return departmentsRepository.findById(id);
+    @Transactional(readOnly = true)
+    public DepartmentDTO getDepartmentById(Long id) {
+        Departments departments = departmentsRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return departmentMapper.mapDepartmentToDto(departments);
     }
 
     public Departments addNewDepartment(Departments department) {

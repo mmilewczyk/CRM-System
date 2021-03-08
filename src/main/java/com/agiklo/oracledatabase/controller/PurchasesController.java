@@ -1,6 +1,7 @@
 package com.agiklo.oracledatabase.controller;
 
 import com.agiklo.oracledatabase.entity.Purchases;
+import com.agiklo.oracledatabase.entity.dto.PurchasesDTO;
 import com.agiklo.oracledatabase.service.PurchasesService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.agiklo.oracledatabase.controller.ApiMapping.PURCHASES_REST_URL;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping(produces="application/json", path = PURCHASES_REST_URL)
@@ -22,17 +24,13 @@ public class PurchasesController {
     private final PurchasesService purchasesService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Purchases> getAllPurchases(){
-        return purchasesService.getAllPurchases();
+    public ResponseEntity<List<PurchasesDTO>> getAllPurchases(){
+        return status(HttpStatus.OK).body(purchasesService.getAllPurchases());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Purchases> getPurchaseById(@PathVariable("id") Long id){
-        Optional<Purchases> optionalPurchases = purchasesService.getPurchaseById(id);
-        return optionalPurchases
-                .map(purchases -> new ResponseEntity<>(purchases, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<PurchasesDTO> getPurchaseById(@PathVariable("id") Long id){
+        return status(HttpStatus.OK).body(purchasesService.getPurchaseById(id));
     }
 
     @PostMapping(consumes="application/json")

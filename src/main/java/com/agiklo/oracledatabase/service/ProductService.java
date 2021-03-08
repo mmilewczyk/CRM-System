@@ -1,12 +1,17 @@
 package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Product;
+import com.agiklo.oracledatabase.entity.dto.ProductDTO;
 import com.agiklo.oracledatabase.exports.ExportProductsToPDF;
+import com.agiklo.oracledatabase.mapper.ProductMapper;
 import com.agiklo.oracledatabase.repository.ProductRepository;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,19 +20,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<ProductDTO> getAllProducts(){
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::mapProductToDto)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Product> getProductById(Long id){
-        return productRepository.findById(id);
+    @Transactional(readOnly = true)
+    public ProductDTO getProductById(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return productMapper.mapProductToDto(product);
     }
 
     public Product addNewProduct(Product product) {
@@ -57,11 +71,11 @@ public class ProductService {
         exporter.export(response);
     }
 
-    public List<Product> findAllByName(String name) throws NotFoundException {
-        try {
-            return productRepository.findProductsByNameContaining(name);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("The specified product does not exist");
-        }
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findAllByName(String name) {
+        return productRepository.findProductsByNameContaining(name)
+                .stream()
+                .map(productMapper::mapProductToDto)
+                .collect(Collectors.toList());
     }
 }

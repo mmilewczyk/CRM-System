@@ -1,12 +1,17 @@
 package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Supplier;
+import com.agiklo.oracledatabase.entity.dto.SupplierDTO;
 import com.agiklo.oracledatabase.exports.ExportSuppliersToPDF;
+import com.agiklo.oracledatabase.mapper.SupplierMapper;
 import com.agiklo.oracledatabase.repository.SupplierRepository;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,19 +20,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class SupplierService {
 
     private final SupplierRepository supplierRepository;
+    private final SupplierMapper supplierMapper;
 
-    public List<Supplier> getAllSuppliers(){
-        return supplierRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<SupplierDTO> getAllSuppliers(){
+        return supplierRepository.findAll()
+                .stream()
+                .map(supplierMapper::mapSupplierToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Supplier> getSupplierById(Long id) {
-        return supplierRepository.findById(id);
+    @Transactional(readOnly = true)
+    public SupplierDTO getSupplierById(Long id) {
+        Supplier supplier = supplierRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return supplierMapper.mapSupplierToDTO(supplier);
     }
 
     public Supplier addNewSuppiler(Supplier supplier){

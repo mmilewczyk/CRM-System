@@ -1,6 +1,7 @@
 package com.agiklo.oracledatabase.controller;
 
 import com.agiklo.oracledatabase.entity.Departments;
+import com.agiklo.oracledatabase.entity.dto.DepartmentDTO;
 import com.agiklo.oracledatabase.service.DepartmentService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import static com.agiklo.oracledatabase.controller.ApiMapping.DEPARTMENTS_REST_URL;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping(produces="application/json", path = DEPARTMENTS_REST_URL)
@@ -24,17 +25,13 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Departments> getAllDepartments(){
-        return departmentService.getAllDepartments();
+    public ResponseEntity<List<DepartmentDTO>> getAllDepartments(){
+        return status(HttpStatus.OK).body(departmentService.getAllDepartments());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Departments> getDepartmentById(@PathVariable("id") Long id){
-        Optional<Departments> optionalDepartment = departmentService.getDepartmentById(id);
-        return optionalDepartment
-                .map(departments -> new ResponseEntity<>(departments, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<DepartmentDTO> getDepartmentById(@PathVariable("id") Long id){
+        return status(HttpStatus.OK).body(departmentService.getDepartmentById(id));
     }
 
     @PostMapping(consumes="application/json")
