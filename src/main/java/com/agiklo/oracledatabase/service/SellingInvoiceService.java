@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +33,7 @@ public class SellingInvoiceService {
     @Transactional(readOnly = true)
     public SellingInvoiceDTO getInvoiceById(Long id) {
         SellingInvoice sellingInvoice = sellingInvoiceRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Selling invoice cannot be found, the specified id does not exist"));
         return sellingInvoiceMapper.mapSellingInvoiceToDTO(sellingInvoice);
     }
 

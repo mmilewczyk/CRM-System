@@ -39,7 +39,7 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public CustomerDTO getCustomerById(Long id) {
         Customers customer = customerRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer Not Found"));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer cannot be found, the specified id does not exist"));
         return customerMapper.mapCustomersToDto(customer);
 
     }

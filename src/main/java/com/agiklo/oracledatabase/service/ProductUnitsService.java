@@ -1,6 +1,5 @@
 package com.agiklo.oracledatabase.service;
 
-import com.agiklo.oracledatabase.entity.ProductUnits;
 import com.agiklo.oracledatabase.entity.dto.ProductUnitsDTO;
 import com.agiklo.oracledatabase.mapper.ProductUnitsMapper;
 import com.agiklo.oracledatabase.repository.ProductUnitsRepository;

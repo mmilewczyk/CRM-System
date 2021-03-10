@@ -36,7 +36,7 @@ public class EmployeeService implements UserDetailsService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmployeeMapper employeeMapper;
 
-    private final static String USER_NOT_FOUND_MSG =
+    private static final String USER_NOT_FOUND_MSG =
             "user with email %s not found";
 
 
@@ -93,7 +93,7 @@ public class EmployeeService implements UserDetailsService {
     @Transactional(readOnly = true)
     public EmployeeDTO getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee cannot be found, the specified id does not exist"));
         return employeeMapper.mapEmployeeToDto(employee);
     }
 

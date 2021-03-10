@@ -19,7 +19,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +39,7 @@ public class SupplierService {
     @Transactional(readOnly = true)
     public SupplierDTO getSupplierById(Long id) {
         Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Supplier cannot be found, the specified id does not exist"));
         return supplierMapper.mapSupplierToDTO(supplier);
     }
 

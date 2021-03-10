@@ -1,7 +1,6 @@
 package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Absenteeism;
-import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.dto.AbsenteeismDTO;
 import com.agiklo.oracledatabase.exports.ExportAbsenteeismToPDF;
 import com.agiklo.oracledatabase.mapper.AbsenteeismMapper;
@@ -20,7 +19,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +39,7 @@ public class AbsenteeismService {
     @Transactional(readOnly = true)
     public AbsenteeismDTO getAbsenteeismById(Long id){
         Absenteeism absenteeism = absenteeismRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Absenteeism Not Found"));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Absenteeism cannot be found, the specified id does not exist"));
         return absenteeismMapper.mapAbsenteeismToDto(absenteeism);
     }
 

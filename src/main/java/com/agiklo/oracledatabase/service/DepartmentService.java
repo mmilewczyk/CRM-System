@@ -39,7 +39,7 @@ public class DepartmentService {
     @Transactional(readOnly = true)
     public DepartmentDTO getDepartmentById(Long id) {
         Departments departments = departmentsRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Department cannot be found, the specified id does not exist"));
         return departmentMapper.mapDepartmentToDto(departments);
     }
 

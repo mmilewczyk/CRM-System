@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +33,7 @@ public class PurchasesService {
     @Transactional(readOnly = true)
     public PurchasesDTO getPurchaseById(Long id) {
         Purchases purchases = purchasesRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Purchase cannot be found, the specified id does not exist"));
         return purchasesMapper.mapPurchasesToDTO(purchases);
     }
 
