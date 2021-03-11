@@ -2,6 +2,8 @@ package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Employee;
 import com.agiklo.oracledatabase.entity.Post;
+import com.agiklo.oracledatabase.entity.dto.PostDTO;
+import com.agiklo.oracledatabase.mapper.PostMapper;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
 import javassist.NotFoundException;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -22,10 +25,14 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final EmployeeRepository employeeRepository;
+    private final PostMapper postMapper;
 
     @Transactional(readOnly = true)
-    public List<Post> getAllPosts(){
-        return postRepository.findAll();
+    public List<PostDTO> getAllPosts(){
+        return postRepository.findAll()
+                .stream()
+                .map(postMapper::mapPostToDTO)
+                .collect(Collectors.toList());
     }
 
     public Post addNewPost(Post post, Principal principal) {

@@ -1,6 +1,9 @@
 package com.agiklo.oracledatabase.controller;
 
+import com.agiklo.oracledatabase.entity.Comment;
 import com.agiklo.oracledatabase.entity.Post;
+import com.agiklo.oracledatabase.entity.dto.PostDTO;
+import com.agiklo.oracledatabase.service.CommentService;
 import com.agiklo.oracledatabase.service.PostService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -14,6 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.agiklo.oracledatabase.controller.ApiMapping.POSTS_REST_URL;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping(POSTS_REST_URL)
@@ -21,11 +25,12 @@ import static com.agiklo.oracledatabase.controller.ApiMapping.POSTS_REST_URL;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public List<Post> getAllPosts(){
-        return postService.getAllPosts();
+    public ResponseEntity<List<PostDTO>> getAllPosts(){
+        return status(HttpStatus.OK).body(postService.getAllPosts());
     }
 
     @PostMapping(consumes="application/json")
@@ -48,6 +53,11 @@ public class PostController {
                 .map(post -> new ResponseEntity<>(post, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+//    @PostMapping("/comments/{id}")
+//    public Comment addNewCommentToPost(@PathVariable("id") Long id, @RequestBody Comment comment, Principal principal){
+//        return commentService.addNewCommentToPost(id, comment, principal);
+//    }
 
     @GetMapping(path = "/")
     @ResponseStatus(HttpStatus.OK)
