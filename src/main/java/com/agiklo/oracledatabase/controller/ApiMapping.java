@@ -16,6 +16,7 @@ public class ApiMapping {
     public static final String INVOICES_REST_URL = API + VERSION + "/invoices";
     public static final String SUPPLIERS_REST_URL = API + VERSION + "/suppliers";
     public static final String POSTS_REST_URL = API + VERSION + "/posts";
+    public static final String COMMENTS_REST_URL = API + VERSION + "posts/comments";
     public static final String REGISTRATION_REST_URL = API + VERSION + "/registration";
 
 }
