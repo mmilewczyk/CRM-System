@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public interface ExportRepository {
+public interface ExportPDFRepository {
 
     void writeTableHeader(PdfPTable table);
     void writeTableData(PdfPTable table);

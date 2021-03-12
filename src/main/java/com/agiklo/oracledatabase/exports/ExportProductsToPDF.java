@@ -19,7 +19,7 @@ import com.lowagie.text.pdf.*;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ExportProductsToPDF implements ExportRepository{
+public class ExportProductsToPDF implements ExportPDFRepository {
     private List<Product> productList;
 
     @Override

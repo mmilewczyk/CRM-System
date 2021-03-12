@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-public class ExportCustomersToPDF implements ExportRepository{
+public class ExportCustomersToPDF implements ExportPDFRepository {
     private List<Customers> customersList;
 
     @Override
