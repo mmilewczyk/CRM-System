@@ -9,13 +9,14 @@ import com.agiklo.oracledatabase.repository.PostRepository;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,16 +54,17 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Post> getPostById(Long id) {
-        return postRepository.findById(id);
+    public PostDTO getPostById(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return postMapper.mapPostToDTO(post);
     }
 
     @Transactional(readOnly = true)
-    public Set<Post> findPostsByAuthorFirstnameAndLastname(String firstName, String lastName) throws NotFoundException {
-        try {
-            return postRepository.findPostByAuthorFirstNameAndAuthorLastName(firstName, lastName);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("The specified post does not exist");
-        }
+    public Set<PostDTO> findPostsByAuthorFirstnameAndLastname(String firstName, String lastName) {
+            return postRepository.findPostByAuthorFirstNameAndAuthorLastName(firstName, lastName)
+                    .stream()
+                    .map(postMapper::mapPostToDTO)
+                    .collect(Collectors.toSet());
     }
 }

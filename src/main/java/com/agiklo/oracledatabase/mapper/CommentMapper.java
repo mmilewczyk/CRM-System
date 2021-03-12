@@ -8,7 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    @Mapping(target = "authorFirstName", source = "author.firstName")
-    @Mapping(target = "authorLastName", source = "author.lastName")
+    @Mapping(target = "postId", source = "post.postId")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "commentAuthorFirstName", source = "author.firstName")
+    @Mapping(target = "commentAuthorLastName", source = "author.lastName")
+    @Mapping(target = "content", source = "content")
     CommentDTO mapCommentToDTO(Comment comment);
 }

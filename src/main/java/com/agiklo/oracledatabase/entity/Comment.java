@@ -1,7 +1,7 @@
 package com.agiklo.oracledatabase.entity;
 
-import com.agiklo.oracledatabase.entity.Employee;
-import com.agiklo.oracledatabase.entity.Post;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Comment {
 
     @Id
@@ -42,4 +45,11 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
+
+    public Comment(Employee author, LocalDateTime createdAt, String content, Post post) {
+        this.author = author;
+        this.createdAt = createdAt;
+        this.content = content;
+        this.post = post;
+    }
 }

@@ -1,12 +1,11 @@
 package com.agiklo.oracledatabase.entity.dto;
 
-import com.agiklo.oracledatabase.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -14,10 +13,12 @@ import java.util.List;
 @Builder
 public class PostDTO {
 
+    private Long postId;
+    private String createdAt;
     private String authorFirstName;
     private String authorLastName;
     private String title;
     private String content;
-    private List<Comment> comments;
+    private Set<CommentDTO> comments;
 
 }

@@ -1,9 +1,7 @@
 package com.agiklo.oracledatabase.controller;
 
-import com.agiklo.oracledatabase.entity.Comment;
 import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.entity.dto.PostDTO;
-import com.agiklo.oracledatabase.service.CommentService;
 import com.agiklo.oracledatabase.service.PostService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.agiklo.oracledatabase.controller.ApiMapping.POSTS_REST_URL;
@@ -25,7 +22,6 @@ import static org.springframework.http.ResponseEntity.status;
 public class PostController {
 
     private final PostService postService;
-    private final CommentService commentService;
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
@@ -35,7 +31,7 @@ public class PostController {
 
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Post postNewEmployee(@RequestBody Post post, Principal principal) {
+    public Post addNewPost(@RequestBody Post post, Principal principal) {
         return postService.addNewPost(post, principal);
     }
 
@@ -46,24 +42,16 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(
-            @PathVariable("id") Long id) {
-        Optional<Post> optionalPosts = postService.getPostById(id);
-        return optionalPosts
-                .map(post -> new ResponseEntity<>(post, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<PostDTO> getPostById(@PathVariable("id") Long id) {
+        return status(HttpStatus.OK).body(postService.getPostById(id));
     }
-
-//    @PostMapping("/comments/{id}")
-//    public Comment addNewCommentToPost(@PathVariable("id") Long id, @RequestBody Comment comment, Principal principal){
-//        return commentService.addNewCommentToPost(id, comment, principal);
-//    }
 
     @GetMapping(path = "/")
     @ResponseStatus(HttpStatus.OK)
-    public Set<Post> findPostsByAuthorFirstnameAndLastname(
+    public ResponseEntity<Set<PostDTO>> findPostsByAuthorFirstnameAndLastname(
             @RequestParam("firstname") String firstName,
-            @RequestParam("lastname") String lastName) throws NotFoundException {
-        return postService.findPostsByAuthorFirstnameAndLastname(firstName, lastName);
+            @RequestParam("lastname") String lastName){
+        return status(HttpStatus.OK).body(
+                postService.findPostsByAuthorFirstnameAndLastname(firstName, lastName));
     }
 }

@@ -77,11 +77,6 @@ public class EmployeeService implements UserDetailsService {
         return employeeRepository.enableUser(email);
     }
 
-    //TODO: IMPLEMENT THIS METHOD
-    public Optional<Employee> findEmployeeByEmail(String email){
-        return employeeRepository.findByEmail(email);
-    }
-
     @Transactional(readOnly = true)
     public List<EmployeeDTO> getAllEmployees(){
         return employeeRepository.findAll()

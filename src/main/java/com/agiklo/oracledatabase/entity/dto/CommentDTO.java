@@ -13,7 +13,7 @@ public class CommentDTO {
 
     private Long postId;
     private String createdAt;
-    private String authorFirstName;
-    private String authorLastName;
+    private String commentAuthorFirstName;
+    private String commentAuthorLastName;
     private String content;
 }
