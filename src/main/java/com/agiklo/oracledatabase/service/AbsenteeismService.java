@@ -3,6 +3,7 @@ package com.agiklo.oracledatabase.service;
 import com.agiklo.oracledatabase.entity.Absenteeism;
 import com.agiklo.oracledatabase.entity.dto.AbsenteeismDTO;
 import com.agiklo.oracledatabase.exports.ExportAbsenteeismToPDF;
+import com.agiklo.oracledatabase.exports.ExportAbsenteeismToXLSX;
 import com.agiklo.oracledatabase.mapper.AbsenteeismMapper;
 import com.agiklo.oracledatabase.repository.AbsenteeismRepository;
 import javassist.NotFoundException;
@@ -54,6 +55,22 @@ public class AbsenteeismService {
             throw new NotFoundException("The specified id does not exist");
         }
     }
+
+    public void exportToExcel(HttpServletResponse response) throws IOException{
+        response.setContentType("application/vnd.ms-excel");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=absenteeisms_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Absenteeism> absenteeismList = absenteeismRepository.findAll();
+
+        ExportAbsenteeismToXLSX exporter = new ExportAbsenteeismToXLSX(absenteeismList);
+        exporter.export(response);
+    }
+
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");

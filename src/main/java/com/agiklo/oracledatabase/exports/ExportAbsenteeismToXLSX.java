@@ -1,6 +1,6 @@
 package com.agiklo.oracledatabase.exports;
 
-import com.agiklo.oracledatabase.entity.Customers;
+import com.agiklo.oracledatabase.entity.Absenteeism;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,10 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-public class ExportCustomersToXLSX {
+public class ExportAbsenteeismToXLSX {
 
-    private static final String[] columns = {"Id", "First Name", "Last Name", "Zip Code", "City"};
-    List<Customers> customersList;
+    private static final String[] columns = {"Id", "Employee Id", "First Name", "Last Name", "Department", "Date from", "Date to", "Reasons"};
+    List<Absenteeism> absenteeisms;
 
     public void writeColumnsHeader(Workbook workbook, Sheet sheet){
         Font headerFont = workbook.createFont();
@@ -34,14 +34,18 @@ public class ExportCustomersToXLSX {
     }
 
     public void writeCellsData(Sheet sheet) {
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         int rowNum = 1;
-        for (Customers customer : customersList) {
+        for (Absenteeism absenteeism : absenteeisms) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(customer.getId());
-            row.createCell(1).setCellValue(customer.getFirstname());
-            row.createCell(2).setCellValue(customer.getLastname());
-            row.createCell(3).setCellValue(customer.getZipCode());
-            row.createCell(4).setCellValue(customer.getCity());
+            row.createCell(0).setCellValue(absenteeism.getId());
+            row.createCell(1).setCellValue(absenteeism.getEmployee().getId().toString());
+            row.createCell(2).setCellValue(absenteeism.getEmployee().getFirstName());
+            row.createCell(3).setCellValue(absenteeism.getEmployee().getLastName());
+            row.createCell(4).setCellValue(absenteeism.getEmployee().getDepartment().getDepartmentName());
+            row.createCell(5).setCellValue(dateFormatter.format(absenteeism.getDateFrom()));
+            row.createCell(6).setCellValue(dateFormatter.format(absenteeism.getDateTo()));
+            row.createCell(7).setCellValue(String.valueOf(absenteeism.getReasonOfAbsenteeismCode().getAbsenteeismName()));
             // Resize all columns to fit the content size
             for (int i = 0; i < columns.length; i++) {
                 sheet.autoSizeColumn(i);
@@ -50,11 +54,10 @@ public class ExportCustomersToXLSX {
     }
 
     public void export(HttpServletResponse response) throws IOException {
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         Workbook workbook = new XSSFWorkbook();
-
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH");
         String currentDateTime = dateFormatter.format(new Date());
-        String headerValue = "customers_" + currentDateTime + ".xlsx";
+        String headerValue = "absenteeisms_" + currentDateTime + ".xlsx";
         Sheet sheet = workbook.createSheet(headerValue);
 
         writeColumnsHeader(workbook, sheet);
