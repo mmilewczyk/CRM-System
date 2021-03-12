@@ -39,7 +39,7 @@ public class ExportAbsenteeismToXLSX {
         for (Absenteeism absenteeism : absenteeisms) {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(absenteeism.getId());
-            row.createCell(1).setCellValue(absenteeism.getEmployee().getId().toString());
+            row.createCell(1).setCellValue(absenteeism.getEmployee().getId());
             row.createCell(2).setCellValue(absenteeism.getEmployee().getFirstName());
             row.createCell(3).setCellValue(absenteeism.getEmployee().getLastName());
             row.createCell(4).setCellValue(absenteeism.getEmployee().getDepartment().getDepartmentName());
