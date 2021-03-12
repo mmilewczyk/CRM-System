@@ -12,6 +12,7 @@ System (REST API) that enables the management of suppliers, employees, customers
 - PostgreSQL 13
 - Lombok
 - OpenPDF
+- Apache POI
 
 ```
 ⚠️⚠️⚠️
