@@ -1,6 +1,7 @@
-package com.agiklo.oracledatabase.exports;
+package com.agiklo.oracledatabase.exports.pdf;
 
 import com.agiklo.oracledatabase.entity.Absenteeism;;
+import com.agiklo.oracledatabase.exports.ExportPDFRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
@@ -18,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-public class ExportAbsenteeismToPDF implements ExportPDFRepository{
+public class ExportAbsenteeismToPDF implements ExportPDFRepository {
     private final List<Absenteeism> absenteeismList;
 
     @Override

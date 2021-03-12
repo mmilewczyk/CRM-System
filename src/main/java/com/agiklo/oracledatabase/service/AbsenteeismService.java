@@ -2,8 +2,8 @@ package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Absenteeism;
 import com.agiklo.oracledatabase.entity.dto.AbsenteeismDTO;
-import com.agiklo.oracledatabase.exports.ExportAbsenteeismToPDF;
-import com.agiklo.oracledatabase.exports.ExportAbsenteeismToXLSX;
+import com.agiklo.oracledatabase.exports.pdf.ExportAbsenteeismToPDF;
+import com.agiklo.oracledatabase.exports.excel.ExportAbsenteeismToXLSX;
 import com.agiklo.oracledatabase.mapper.AbsenteeismMapper;
 import com.agiklo.oracledatabase.repository.AbsenteeismRepository;
 import javassist.NotFoundException;

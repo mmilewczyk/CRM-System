@@ -2,7 +2,8 @@ package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Product;
 import com.agiklo.oracledatabase.entity.dto.ProductDTO;
-import com.agiklo.oracledatabase.exports.ExportProductsToPDF;
+import com.agiklo.oracledatabase.exports.pdf.ExportProductsToPDF;
+import com.agiklo.oracledatabase.exports.excel.ExportProductsToXLSX;
 import com.agiklo.oracledatabase.mapper.ProductMapper;
 import com.agiklo.oracledatabase.repository.ProductRepository;
 import javassist.NotFoundException;
@@ -53,6 +54,21 @@ public class ProductService {
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("The specified id does not exist");
         }
+    }
+
+    public void exportToExcel(HttpServletResponse response) throws IOException{
+        response.setContentType("application/vnd.ms-excel");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=products_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Product> productList = productRepository.findAll();
+
+        ExportProductsToXLSX exporter = new ExportProductsToXLSX(productList);
+        exporter.export(response);
     }
 
     public void exportToPDF(HttpServletResponse response) throws IOException {

@@ -46,6 +46,12 @@ public class DepartmentController {
         departmentService.deleteDepartmentById(id);
     }
 
+    @GetMapping("/export/excel")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        departmentService.exportToExcel(response);
+    }
+
     @GetMapping("/export/pdf")
     @ResponseStatus(HttpStatus.CREATED)
     public void exportToPDF(HttpServletResponse response) throws IOException {

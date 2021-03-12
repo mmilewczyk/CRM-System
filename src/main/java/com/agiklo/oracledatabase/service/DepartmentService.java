@@ -1,8 +1,11 @@
 package com.agiklo.oracledatabase.service;
 
+import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.Departments;
 import com.agiklo.oracledatabase.entity.dto.DepartmentDTO;
 import com.agiklo.oracledatabase.exports.ExportDepartmentsToPDF;
+import com.agiklo.oracledatabase.exports.excel.ExportCustomersToXLSX;
+import com.agiklo.oracledatabase.exports.excel.ExportDepartmentsToXLSX;
 import com.agiklo.oracledatabase.mapper.DepartmentMapper;
 import com.agiklo.oracledatabase.repository.DepartmentsRepository;
 import javassist.NotFoundException;
@@ -53,6 +56,21 @@ public class DepartmentService {
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("The specified id does not exist");
         }
+    }
+
+    public void exportToExcel(HttpServletResponse response) throws IOException{
+        response.setContentType("application/vnd.ms-excel");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=departments_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Departments> departmentsList = departmentsRepository.findAll();
+
+        ExportDepartmentsToXLSX exporter = new ExportDepartmentsToXLSX(departmentsList);
+        exporter.export(response);
     }
 
     public void exportToPDF(HttpServletResponse response) throws IOException {

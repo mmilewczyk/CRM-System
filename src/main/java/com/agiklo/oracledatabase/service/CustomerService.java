@@ -2,8 +2,8 @@ package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.dto.CustomerDTO;
-import com.agiklo.oracledatabase.exports.ExportCustomersToPDF;
-import com.agiklo.oracledatabase.exports.ExportCustomersToXLSX;
+import com.agiklo.oracledatabase.exports.pdf.ExportCustomersToPDF;
+import com.agiklo.oracledatabase.exports.excel.ExportCustomersToXLSX;
 import com.agiklo.oracledatabase.mapper.CustomerMapper;
 import com.agiklo.oracledatabase.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
