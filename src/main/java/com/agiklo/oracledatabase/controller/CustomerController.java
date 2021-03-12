@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.dto.CustomerDTO;
 import com.agiklo.oracledatabase.service.CustomerService;
 import lombok.AllArgsConstructor;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,12 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomerById(@PathVariable("id") Long id) {
         customerService.deleteCustomerById(id);
+    }
+
+    @GetMapping("/export/excel")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        customerService.exportToExcel(response);
     }
 
     @GetMapping("/export/pdf")

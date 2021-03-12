@@ -3,6 +3,7 @@ package com.agiklo.oracledatabase.service;
 import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.dto.CustomerDTO;
 import com.agiklo.oracledatabase.exports.ExportCustomersToPDF;
+import com.agiklo.oracledatabase.exports.ExportCustomersToXLSX;
 import com.agiklo.oracledatabase.mapper.CustomerMapper;
 import com.agiklo.oracledatabase.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
@@ -62,6 +63,21 @@ public class CustomerService {
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The specified id does not exist");
         }
+    }
+
+    public void exportToExcel(HttpServletResponse response) throws IOException{
+        response.setContentType("application/vnd.ms-excel");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=customers_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Customers> customersList = customerRepository.findAll();
+
+        ExportCustomersToXLSX exporter = new ExportCustomersToXLSX(customersList);
+        exporter.export(response);
     }
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
