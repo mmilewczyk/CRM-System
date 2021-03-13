@@ -16,15 +16,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class AbsenteeismService {
+public class AbsenteeismService implements CurrentTimeInterface{
 
     private final AbsenteeismRepository absenteeismRepository;
     private final AbsenteeismMapper absenteeismMapper;
@@ -56,13 +53,10 @@ public class AbsenteeismService {
         }
     }
 
-    public void exportToExcel(HttpServletResponse response) throws IOException{
+    public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=absenteeisms_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=absenteeisms_" + getCurrentDateTime() + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<Absenteeism> absenteeismList = absenteeismRepository.findAll();
@@ -74,11 +68,8 @@ public class AbsenteeismService {
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=absenteeisms_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=absenteeisms_" + getCurrentDateTime() + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Absenteeism> absenteeismList = absenteeismRepository.findAll();

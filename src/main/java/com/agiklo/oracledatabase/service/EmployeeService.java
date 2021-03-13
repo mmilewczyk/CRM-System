@@ -22,15 +22,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class EmployeeService implements UserDetailsService {
+public class EmployeeService implements UserDetailsService, CurrentTimeInterface {
 
     private final EmployeeRepository employeeRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -109,13 +107,10 @@ public class EmployeeService implements UserDetailsService {
         }
     }
 
-    public void exportToExcel(HttpServletResponse response) throws IOException{
+    public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=employees_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=employees_" + getCurrentDateTime() + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<Employee> employeeList = employeeRepository.findAll();
@@ -126,11 +121,8 @@ public class EmployeeService implements UserDetailsService {
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=employees_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=employees_" + getCurrentDateTime() + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Employee> listEmployees = employeeRepository.findAll();

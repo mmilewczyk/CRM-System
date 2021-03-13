@@ -16,15 +16,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class DepartmentService {
+public class DepartmentService implements CurrentTimeInterface{
 
     private final DepartmentsRepository departmentsRepository;
     private final DepartmentMapper departmentMapper;
@@ -58,11 +55,8 @@ public class DepartmentService {
 
     public void exportToExcel(HttpServletResponse response) throws IOException{
         response.setContentType("application/vnd.ms-excel");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=departments_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=departments_" + getCurrentDateTime() + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<Departments> departmentsList = departmentsRepository.findAll();
@@ -73,11 +67,8 @@ public class DepartmentService {
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=departments_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=departments_" + getCurrentDateTime() + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Departments> departmentsList = departmentsRepository.findAll();

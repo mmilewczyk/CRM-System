@@ -15,16 +15,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class CustomerService {
+public class CustomerService implements CurrentTimeInterface{
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
@@ -65,13 +62,10 @@ public class CustomerService {
         }
     }
 
-    public void exportToExcel(HttpServletResponse response) throws IOException{
+    public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=customers_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=customers_" + getCurrentDateTime() + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<Customers> customersList = customerRepository.findAll();
@@ -82,11 +76,8 @@ public class CustomerService {
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=customers_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=customers_" + getCurrentDateTime() + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Customers> customersList = customerRepository.findAll();

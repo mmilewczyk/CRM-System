@@ -16,15 +16,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class SupplierService {
+public class SupplierService implements CurrentTimeInterface{
 
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
@@ -78,10 +75,5 @@ public class SupplierService {
 
         ExportSuppliersToPDF exporter = new ExportSuppliersToPDF(supplierList);
         exporter.export(response);
-    }
-
-    private String getCurrentDateTime(){
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        return dateFormatter.format(new Date());
     }
 }
