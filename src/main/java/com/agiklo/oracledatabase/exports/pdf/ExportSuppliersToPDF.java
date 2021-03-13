@@ -2,62 +2,23 @@ package com.agiklo.oracledatabase.exports.pdf;
 
 import com.agiklo.oracledatabase.entity.Supplier;
 import com.agiklo.oracledatabase.exports.ExportPDFRepository;
+import com.agiklo.oracledatabase.exports.PDFFileDesignRepository;
 import com.lowagie.text.*;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
 import lombok.AllArgsConstructor;
 
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import static com.lowagie.text.Element.ALIGN_CENTER;
 
 @AllArgsConstructor
-public class ExportSuppliersToPDF implements ExportPDFRepository {
-    private List<Supplier> supplierList;
+public class ExportSuppliersToPDF implements ExportPDFRepository, PDFFileDesignRepository {
 
-    @Override
-    public void writeTableHeader(PdfPTable table) {
-        PdfPCell cell = new PdfPCell();
-        cell.setBackgroundColor(Color.gray);
-        cell.setPadding(5);
+    private final List<Supplier> supplierList;
 
-        com.lowagie.text.Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.WHITE);
-
-        cell.setPhrase(new Phrase("Id", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Name of Supplier", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Mode of transport", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Max length", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Max weight", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Min length", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Min weight", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Transport capacity", font));
-        table.addCell(cell);
-
-        cell.setPhrase(new Phrase("Activity status", font));
-        table.addCell(cell);
-    }
+    private static final String[] columns =
+            {"Id", "Name of Supplier", "Mode of transport", "Max length", "Max weight", "Min length", "Min weight", "Transport capacity", "Activity status"};
 
     @Override
     public void writeTableData(PdfPTable table) {
@@ -77,26 +38,10 @@ public class ExportSuppliersToPDF implements ExportPDFRepository {
     @Override
     public void export(HttpServletResponse response) throws IOException {
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
+        setupFileStyle(response, document);
 
-        document.open();
-        Font font = FontFactory.getFont(FontFactory.TIMES_BOLD);
-        font.setSize(18);
-        font.setColor(Color.BLACK);
-
-        DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-        Paragraph date = new Paragraph("Date of data export: " + currentDateTime, FontFactory.getFont(FontFactory.TIMES_ROMAN));
-        date.setAlignment(Paragraph.ALIGN_RIGHT);
-        document.add(date);
-
-        com.lowagie.text.Image jpg = com.lowagie.text.Image.getInstance("https://i.imgur.com/PpNT62x.jpg");
-        jpg.setAlignment(Image.ALIGN_CENTER);
-        jpg.scaleAbsolute(100f, 30.11f);
-        document.add(jpg);
-
-        Paragraph p = new Paragraph("Suppliers", font);
-        p.setAlignment(Paragraph.ALIGN_CENTER);
+        Paragraph p = new Paragraph("Suppliers", setupFont());
+        p.setAlignment(ALIGN_CENTER);
 
         document.add(p);
 
@@ -105,7 +50,7 @@ public class ExportSuppliersToPDF implements ExportPDFRepository {
         table.setWidths(new float[] {1.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f});
         table.setSpacingBefore(10);
 
-        writeTableHeader(table);
+        writeTableHeader(table, columns);
         writeTableData(table);
 
         document.add(table);
