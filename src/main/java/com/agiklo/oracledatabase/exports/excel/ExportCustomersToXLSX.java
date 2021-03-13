@@ -38,7 +38,7 @@ public class ExportCustomersToXLSX implements ExcelColumnsHeaderWriter {
     public void export(HttpServletResponse response) throws IOException {
         Workbook workbook = new XSSFWorkbook();
 
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = dateFormatter.format(new Date());
         String headerValue = "customers_" + currentDateTime + ".xlsx";
         Sheet sheet = workbook.createSheet(headerValue);
