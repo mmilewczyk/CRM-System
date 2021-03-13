@@ -2,7 +2,8 @@ package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.Supplier;
 import com.agiklo.oracledatabase.entity.dto.SupplierDTO;
-import com.agiklo.oracledatabase.exports.ExportSuppliersToPDF;
+import com.agiklo.oracledatabase.exports.excel.ExportSuppliersToXLSX;
+import com.agiklo.oracledatabase.exports.pdf.ExportSuppliersToPDF;
 import com.agiklo.oracledatabase.mapper.SupplierMapper;
 import com.agiklo.oracledatabase.repository.SupplierRepository;
 import javassist.NotFoundException;
@@ -55,18 +56,32 @@ public class SupplierService {
         }
     }
 
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.ms-excel");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=suppliers_" + getCurrentDateTime() + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Supplier> supplierList = supplierRepository.findAll();
+
+        ExportSuppliersToXLSX exporter = new ExportSuppliersToXLSX(supplierList);
+        exporter.export(response);
+    }
+
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=suppliers_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=suppliers_" + getCurrentDateTime() + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Supplier> supplierList = supplierRepository.findAll();
 
         ExportSuppliersToPDF exporter = new ExportSuppliersToPDF(supplierList);
         exporter.export(response);
+    }
+
+    private String getCurrentDateTime(){
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        return dateFormatter.format(new Date());
     }
 }

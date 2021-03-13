@@ -46,6 +46,12 @@ public class SupplierController {
         supplierService.deleteSupplierById(id);
     }
 
+    @GetMapping("/export/excel")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        supplierService.exportToExcel(response);
+    }
+
     @GetMapping("/export/pdf")
     @ResponseStatus(HttpStatus.CREATED)
     public void exportToPDF(HttpServletResponse response) throws IOException {
