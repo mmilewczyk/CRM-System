@@ -16,9 +16,9 @@ import java.util.List;
 public class ExportAbsenteeismToXLSX {
 
     private static final String[] columns = {"Id", "Employee Id", "First Name", "Last Name", "Department", "Date from", "Date to", "Reasons"};
-    List<Absenteeism> absenteeisms;
+    private final List<Absenteeism> absenteeisms;
 
-    public void writeColumnsHeader(Workbook workbook, Sheet sheet){
+    private void writeColumnsHeader(Workbook workbook, Sheet sheet){
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerFont.setFontHeightInPoints((short) 14);
@@ -33,7 +33,7 @@ public class ExportAbsenteeismToXLSX {
         }
     }
 
-    public void writeCellsData(Sheet sheet) {
+    private void writeCellsData(Sheet sheet) {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         int rowNum = 1;
         for (Absenteeism absenteeism : absenteeisms) {

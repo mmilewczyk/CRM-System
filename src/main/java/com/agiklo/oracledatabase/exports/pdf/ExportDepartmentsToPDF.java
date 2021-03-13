@@ -1,6 +1,7 @@
-package com.agiklo.oracledatabase.exports;
+package com.agiklo.oracledatabase.exports.pdf;
 
 import com.agiklo.oracledatabase.entity.Departments;
+import com.agiklo.oracledatabase.exports.ExportPDFRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;

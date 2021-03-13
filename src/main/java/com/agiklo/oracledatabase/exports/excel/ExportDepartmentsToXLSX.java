@@ -15,9 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ExportDepartmentsToXLSX {
     private static final String[] columns = {"Id", "Department name", "City", "Manager"};
-    List<Departments> departmentsList;
+    private final List<Departments> departmentsList;
 
-    public void writeColumnsHeader(Workbook workbook, Sheet sheet){
+    private void writeColumnsHeader(Workbook workbook, Sheet sheet){
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerFont.setFontHeightInPoints((short) 14);
@@ -32,7 +32,7 @@ public class ExportDepartmentsToXLSX {
         }
     }
 
-    public void writeCellsData(Sheet sheet) {
+    private void writeCellsData(Sheet sheet) {
         int rowNum = 1;
         for (Departments department : departmentsList) {
             Row row = sheet.createRow(rowNum++);

@@ -1,10 +1,8 @@
 package com.agiklo.oracledatabase.service;
 
-import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.Departments;
 import com.agiklo.oracledatabase.entity.dto.DepartmentDTO;
-import com.agiklo.oracledatabase.exports.ExportDepartmentsToPDF;
-import com.agiklo.oracledatabase.exports.excel.ExportCustomersToXLSX;
+import com.agiklo.oracledatabase.exports.pdf.ExportDepartmentsToPDF;
 import com.agiklo.oracledatabase.exports.excel.ExportDepartmentsToXLSX;
 import com.agiklo.oracledatabase.mapper.DepartmentMapper;
 import com.agiklo.oracledatabase.repository.DepartmentsRepository;

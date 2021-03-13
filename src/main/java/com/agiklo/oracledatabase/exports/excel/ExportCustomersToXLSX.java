@@ -16,9 +16,9 @@ import java.util.List;
 public class ExportCustomersToXLSX {
 
     private static final String[] columns = {"Id", "First Name", "Last Name", "Zip Code", "City"};
-    List<Customers> customersList;
+    private final List<Customers> customersList;
 
-    public void writeColumnsHeader(Workbook workbook, Sheet sheet){
+    private void writeColumnsHeader(Workbook workbook, Sheet sheet){
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerFont.setFontHeightInPoints((short) 14);
@@ -33,7 +33,7 @@ public class ExportCustomersToXLSX {
         }
     }
 
-    public void writeCellsData(Sheet sheet) {
+    private void writeCellsData(Sheet sheet) {
         int rowNum = 1;
         for (Customers customer : customersList) {
             Row row = sheet.createRow(rowNum++);
