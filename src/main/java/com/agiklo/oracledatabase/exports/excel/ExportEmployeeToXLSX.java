@@ -28,7 +28,7 @@ public class ExportEmployeeToXLSX implements ExcelColumnsHeaderWriter {
             row.createCell(1).setCellValue(employee.getFirstName());
             row.createCell(2).setCellValue(employee.getLastName());
             row.createCell(3).setCellValue(employee.getDepartment().getDepartmentName());
-            row.createCell(4).setCellValue(employee.getUserRole().toString());
+            row.createCell(4).setCellValue(employee.getUserRole().toString().toLowerCase());
             row.createCell(5).setCellValue(employee.getSalary());
             // Resize all columns to fit the content size
             for (int i = 0; i < columns.length; i++) {

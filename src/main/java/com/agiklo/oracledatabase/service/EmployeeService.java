@@ -1,7 +1,7 @@
 package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.dto.EmployeeDTO;
-import com.agiklo.oracledatabase.exports.ExportEmployeeToPDF;
+import com.agiklo.oracledatabase.exports.pdf.ExportEmployeeToPDF;
 import com.agiklo.oracledatabase.exports.excel.ExportEmployeeToXLSX;
 import com.agiklo.oracledatabase.mapper.EmployeeMapper;
 import com.agiklo.oracledatabase.security.Registration.token.ConfirmationToken;
