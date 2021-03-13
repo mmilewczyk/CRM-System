@@ -2,6 +2,7 @@ package com.agiklo.oracledatabase.service;
 
 import com.agiklo.oracledatabase.entity.dto.EmployeeDTO;
 import com.agiklo.oracledatabase.exports.ExportEmployeeToPDF;
+import com.agiklo.oracledatabase.exports.excel.ExportEmployeeToXLSX;
 import com.agiklo.oracledatabase.mapper.EmployeeMapper;
 import com.agiklo.oracledatabase.security.Registration.token.ConfirmationToken;
 import com.agiklo.oracledatabase.security.Registration.token.ConfirmationTokenService;
@@ -106,6 +107,21 @@ public class EmployeeService implements UserDetailsService {
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("The specified id does not exist");
         }
+    }
+
+    public void exportToExcel(HttpServletResponse response) throws IOException{
+        response.setContentType("application/vnd.ms-excel");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=employees_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Employee> employeeList = employeeRepository.findAll();
+
+        ExportEmployeeToXLSX exporter = new ExportEmployeeToXLSX(employeeList);
+        exporter.export(response);
     }
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
