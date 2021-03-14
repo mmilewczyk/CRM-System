@@ -7,6 +7,7 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,35 +26,41 @@ public class AbsenteeismController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<AbsenteeismDTO>> getAllAbsenteeisms(){
         return status(HttpStatus.OK).body(absenteeismService.getAllAbsenteeisms());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<AbsenteeismDTO> getAbsenteeismById(@PathVariable("id") Long id){
         return status(HttpStatus.OK).body(absenteeismService.getAbsenteeismById(id));
     }
 
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public Absenteeism postNewAbsenteeism(@RequestBody Absenteeism absenteeism) {
         return absenteeismService.addNewAbsenteeism(absenteeism);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteAbsenteeismById(@PathVariable("id") Long id) throws NotFoundException {
         absenteeismService.deleteAbsenteeismById(id);
     }
 
     @GetMapping("/export/excel")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         absenteeismService.exportToExcel(response);
     }
 
     @GetMapping("/export/pdf")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         absenteeismService.exportToPDF(response);
     }

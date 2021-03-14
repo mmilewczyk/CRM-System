@@ -7,6 +7,7 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,27 +25,32 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<ProductDTO>> getAllProducts(){
         return status(HttpStatus.OK).body(productService.getAllProducts());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable("id") Long id){
         return status(HttpStatus.OK).body(productService.getProductById(id));
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<ProductDTO>> findAllByName(@RequestParam("name") String name) {
         return status(HttpStatus.OK).body(productService.findAllByName(name));
     }
 
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Product postNewProduct(@RequestBody Product product) {
         return productService.addNewProduct(product);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProductById(@PathVariable("id") Long id) throws NotFoundException {
         productService.deleteProductById(id);
@@ -52,12 +58,14 @@ public class ProductController {
 
     @GetMapping("/export/excel")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         productService.exportToExcel(response);
     }
 
     @GetMapping("/export/pdf")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         productService.exportToPDF(response);
     }

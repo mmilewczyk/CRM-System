@@ -7,10 +7,10 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.agiklo.oracledatabase.controller.ApiMapping.PURCHASES_REST_URL;
 import static org.springframework.http.ResponseEntity.status;
@@ -24,23 +24,27 @@ public class PurchasesController {
     private final PurchasesService purchasesService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<PurchasesDTO>> getAllPurchases(){
         return status(HttpStatus.OK).body(purchasesService.getAllPurchases());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<PurchasesDTO> getPurchaseById(@PathVariable("id") Long id){
         return status(HttpStatus.OK).body(purchasesService.getPurchaseById(id));
     }
 
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public Purchases postNewPurchase(@RequestBody Purchases purchase) {
         return purchasesService.addNewPurchase(purchase);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deletePurchaseById(@PathVariable("id") Long id) throws NotFoundException {
        purchasesService.deletePurchaseById(id);
     }

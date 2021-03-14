@@ -46,6 +46,7 @@ public class PostService {
     }
 
     public void deletePostById(Long id) throws NotFoundException {
+        // TODO: USERS CAN DELETE ONLY THEY OWN POST
         try{
             postRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

@@ -7,6 +7,7 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,35 +26,41 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<DepartmentDTO>> getAllDepartments(){
         return status(HttpStatus.OK).body(departmentService.getAllDepartments());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<DepartmentDTO> getDepartmentById(@PathVariable("id") Long id){
         return status(HttpStatus.OK).body(departmentService.getDepartmentById(id));
     }
 
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public Departments postNewDepartment(@RequestBody Departments department) {
         return departmentService.addNewDepartment(department);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteDepartmentById(@PathVariable("id") Long id) throws NotFoundException {
         departmentService.deleteDepartmentById(id);
     }
 
     @GetMapping("/export/excel")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         departmentService.exportToExcel(response);
     }
 
     @GetMapping("/export/pdf")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         departmentService.exportToPDF(response);
     }

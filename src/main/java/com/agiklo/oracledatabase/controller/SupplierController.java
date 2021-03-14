@@ -7,6 +7,7 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,35 +26,41 @@ public class SupplierController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<SupplierDTO>> getAllSuppliers(){
         return status(HttpStatus.OK).body(supplierService.getAllSuppliers());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<SupplierDTO> getSupplierById(@PathVariable("id") Long id){
         return status(HttpStatus.OK).body(supplierService.getSupplierById(id));
     }
 
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Supplier postNewSuppiler(@RequestBody Supplier supplier){
         return supplierService.addNewSuppiler(supplier);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteSupplierById(@PathVariable("id") Long id) throws NotFoundException {
         supplierService.deleteSupplierById(id);
     }
 
     @GetMapping("/export/excel")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         supplierService.exportToExcel(response);
     }
 
     @GetMapping("/export/pdf")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         supplierService.exportToPDF(response);
     }

@@ -1,11 +1,11 @@
 package com.agiklo.oracledatabase.controller;
 
-import com.agiklo.oracledatabase.entity.ProductUnits;
 import com.agiklo.oracledatabase.entity.dto.ProductUnitsDTO;
 import com.agiklo.oracledatabase.service.ProductUnitsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +21,7 @@ public class ProductUnitsController {
     private final ProductUnitsService productUnitsService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<ProductUnitsDTO>> getAllProductUnits(){
         return status(HttpStatus.OK).body(productUnitsService.getAllProductUnits());
     }
