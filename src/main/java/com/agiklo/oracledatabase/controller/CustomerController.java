@@ -4,9 +4,9 @@ import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.dto.CustomerDTO;
 import com.agiklo.oracledatabase.service.CustomerService;
 import lombok.AllArgsConstructor;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,16 +27,19 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<CustomerDTO>> getAllCustomers(){
         return status(HttpStatus.OK).body(customerService.getAllCustomers());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("id") Long id) {
         return status(HttpStatus.OK).body(customerService.getCustomerById(id));
     }
 
     @GetMapping(path = "/")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<Set<CustomerDTO>> findCustomersByFirstname(
             @RequestParam("firstname") String firstName){
         return status(HttpStatus.OK).body(customerService.findCustomersByFirstname(firstName));
@@ -44,24 +47,28 @@ public class CustomerController {
 
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public Customers postNewCustomer(@RequestBody CustomerDTO customer) {
         return customerService.addNewCustomer(customer);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteCustomerById(@PathVariable("id") Long id) {
         customerService.deleteCustomerById(id);
     }
 
     @GetMapping("/export/excel")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         customerService.exportToExcel(response);
     }
 
     @GetMapping("/export/pdf")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         customerService.exportToPDF(response);
     }

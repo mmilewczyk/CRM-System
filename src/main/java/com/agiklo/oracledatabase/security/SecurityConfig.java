@@ -21,7 +21,10 @@ import javax.crypto.SecretKey;
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final EmployeeService employeeService;
@@ -38,11 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfiguration, secretKey))
-                .addFilterAfter(new JwtUsernameAndPasswordAuthorizationFilter(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                //.antMatchers("/registration/**").hasRole(ADMIN.name())
-                .antMatchers("/registration/**").permitAll();
-                //.antMatchers("/api/v1/**").authenticated();
+                .addFilterAfter(new JwtUsernameAndPasswordAuthorizationFilter(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class);
+//                .authorizeRequests()
+//                .antMatchers("/registration/**").permitAll();
     }
 
     @Bean
