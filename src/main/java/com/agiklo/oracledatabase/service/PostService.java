@@ -6,9 +6,7 @@ import com.agiklo.oracledatabase.entity.dto.PostDTO;
 import com.agiklo.oracledatabase.mapper.PostMapper;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,12 +43,14 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public void deletePostById(Long id) throws NotFoundException {
-        // TODO: USERS CAN DELETE ONLY THEY OWN POST
-        try{
+    public void deletePostById(Long id, Principal principal) {
+        Post post = postRepository.findById(id).orElseThrow(()->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Post cannot be found, the specified id does not exist"));
+        if (post.getAuthor().getEmail().equals(principal.getName())){
             postRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("The specified id does not exist");
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");
         }
     }
 

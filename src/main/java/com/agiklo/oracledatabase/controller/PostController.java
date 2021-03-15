@@ -41,8 +41,8 @@ public class PostController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public void deletePostById(@PathVariable("id") Long id) throws NotFoundException {
-        postService.deletePostById(id);
+    public void deletePostById(@PathVariable("id") Long id, Principal principal) {
+        postService.deletePostById(id, principal);
     }
 
     @GetMapping("/{id}")
