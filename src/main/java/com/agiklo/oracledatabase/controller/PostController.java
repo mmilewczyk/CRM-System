@@ -3,7 +3,6 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.entity.dto.PostDTO;
 import com.agiklo.oracledatabase.service.PostService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

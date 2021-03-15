@@ -39,4 +39,11 @@ public class CommentController {
     public Comment addNewCommentToPost(@PathVariable("id") Long id, @RequestBody Comment comment, Principal principal){
         return commentService.addNewCommentToPost(id, comment, principal);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public void deleteCommentInPostById(@PathVariable("id") Long id, Principal principal) {
+        commentService.deleteCommentInPostById(id, principal);
+    }
 }

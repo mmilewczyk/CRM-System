@@ -9,7 +9,6 @@ import com.agiklo.oracledatabase.repository.CommentRepository;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +17,9 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -47,7 +49,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public Comment addNewCommentToPost(Long id, Comment comment, Principal principal){
         Post post = postRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+                new ResponseStatusException(NOT_FOUND, "Post not found"));
         Employee employee = employeeRepository.findByEmail(principal.getName()).orElseThrow(() ->
                 new IllegalStateException("Employee not found"));
         LocalDateTime actualTime = LocalDateTime.now();
@@ -57,5 +59,16 @@ public class CommentService {
                 comment.getContent(),
                 post
         ));
+    }
+
+    public void deleteCommentInPostById(Long id, Principal principal) {
+        Comment comment = commentRepository.findById(id).orElseThrow(()->
+                new ResponseStatusException(NOT_FOUND, "Comment cannot be found, the specified id does not exist"));
+        if (comment.getAuthor().getEmail().equals(principal.getName())) {
+            commentRepository.deleteById(id);
+        }
+        else {
+            throw new ResponseStatusException(FORBIDDEN, "You are not the author of this comment");
+        }
     }
 }
