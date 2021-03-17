@@ -21,4 +21,13 @@ public class PostDTO {
     private String content;
     private Set<CommentDTO> comments;
 
+    public Set<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<CommentDTO> comments) {
+        this.comments = comments;
+    }
+
+
 }

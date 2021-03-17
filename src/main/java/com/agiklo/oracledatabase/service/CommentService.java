@@ -46,7 +46,7 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Comment addNewCommentToPost(Long id, Comment comment, Principal principal){
         Post post = postRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(NOT_FOUND, "Post not found"));
