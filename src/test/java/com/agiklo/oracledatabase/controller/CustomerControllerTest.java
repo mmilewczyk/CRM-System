@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,4 +58,28 @@ class CustomerControllerTest {
         assertThat(customer.getFirstname()).isEqualTo("Mateusz");
         assertThat(customer.getCity()).isEqualTo("Oslo");
     }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "zofiabrzydal@agiklocrm.com", password = "123", authorities = "EMPLOYEE")
+    void shouldNoGetCustomerById() throws Exception {
+        //given
+        List<Customers> customers = customerRepository.findAll();
+        long fakeId = customers
+                .stream()
+                .mapToLong(Customers::getId)
+                .max()
+                .orElseThrow(NoSuchElementException::new);
+        fakeId++;
+        //when
+        mockMvc.perform(get("/api/v1/customers/" + fakeId)).andDo(print())
+
+        //then
+                .andExpect(status().is(404))
+                .andReturn();
+    }
+
+
+
+
 }
