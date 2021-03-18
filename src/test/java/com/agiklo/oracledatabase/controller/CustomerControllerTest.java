@@ -4,8 +4,10 @@ import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.dto.CustomerDTO;
 import com.agiklo.oracledatabase.repository.CustomerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,7 @@ import java.util.NoSuchElementException;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -40,14 +43,10 @@ class CustomerControllerTest {
     @WithMockUser(username = "zofiabrzydal@agiklocrm.com", password = "123", authorities = "EMPLOYEE")
     void shouldGetCustomerById() throws Exception {
         //given
-        Customers newCustomer = new Customers();
-        newCustomer.setFirstname("Mateusz");
-        newCustomer.setLastname("Milewczyk");
-        newCustomer.setCity("Oslo");
-        newCustomer.setZipCode("300-20");
-        customerRepository.save(newCustomer);
+        Customers fakeCustomer = prepareCustomerToTest();
+        customerRepository.save(fakeCustomer);
         //when
-        MvcResult mvcResult = mockMvc.perform(get("/api/v1/customers/" + newCustomer.getId()))
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/customers/" + fakeCustomer.getId()))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
@@ -55,13 +54,12 @@ class CustomerControllerTest {
         //then
         CustomerDTO customer = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CustomerDTO.class);
         assertThat(customer).isNotNull();
-        assertThat(customer.getFirstname()).isEqualTo("Mateusz");
+        assertThat(customer.getFirstname()).isEqualTo("Vidkun");
         assertThat(customer.getCity()).isEqualTo("Oslo");
     }
 
     @Test
-    @Transactional
-    @WithMockUser(username = "zofiabrzydal@agiklocrm.com", password = "123", authorities = "EMPLOYEE")
+    @WithMockUser(username = "ofiabrzydal@agiklocrm.comz", password = "123", authorities = "EMPLOYEE")
     void shouldNoGetCustomerById() throws Exception {
         //given
         List<Customers> customers = customerRepository.findAll();
@@ -73,11 +71,21 @@ class CustomerControllerTest {
         fakeId++;
         //when
         mockMvc.perform(get("/api/v1/customers/" + fakeId)).andDo(print())
-
         //then
-                .andExpect(status().is(404))
-                .andReturn();
+        .andExpect(status().is(404))
+        .andReturn();
     }
+
+    Customers prepareCustomerToTest(){
+        Customers newCustomer = new Customers();
+        newCustomer.setFirstname("Vidkun");
+        newCustomer.setLastname("Rikardson");
+        newCustomer.setPesel("97542899482");
+        newCustomer.setCity("Oslo");
+        newCustomer.setZipCode("300-20");
+        return newCustomer;
+    }
+
 
 
 
