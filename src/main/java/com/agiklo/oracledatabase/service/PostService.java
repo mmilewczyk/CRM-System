@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class PostService {
@@ -43,6 +47,14 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    /**
+     * the method is to check if the logged in user is the author of the post or the admin,
+     * if everything is correct, it deletes the selected post by id.
+     * @param id id of the post to be deleted
+     * @param principal logged in user
+     * @throws ResponseStatusException if principal is not the author of the post or the admin throws 403 status with message,
+     *                                 if id of the post is incorrect throws 404 status with message
+     */
     public void deletePostById(Long id, Principal principal) {
         Post post = postRepository.findById(id).orElseThrow(()->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Post cannot be found, the specified id does not exist"));
