@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class CustomerDTO {
     String firstname;
     String lastname;
-    String pesel;
     String zipCode;
     String city;
 }
