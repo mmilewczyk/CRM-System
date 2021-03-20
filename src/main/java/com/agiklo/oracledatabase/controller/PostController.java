@@ -31,10 +31,9 @@ public class PostController {
     }
 
     @PostMapping(consumes="application/json")
-    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public Post addNewPost(@RequestBody Post post, Principal principal) {
-        return postService.addNewPost(post, principal);
+    public ResponseEntity<Post> addNewPost(@RequestBody Post post, Principal principal) {
+        return status(HttpStatus.CREATED).body(postService.addNewPost(post, principal));
     }
 
     @DeleteMapping("/{id}")
@@ -51,12 +50,10 @@ public class PostController {
     }
 
     @GetMapping(path = "/")
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<Set<PostDTO>> findPostsByAuthorFirstnameAndLastname(
             @RequestParam("firstname") String firstName,
             @RequestParam("lastname") String lastName){
-        return status(HttpStatus.OK).body(
-                postService.findPostsByAuthorFirstnameAndLastname(firstName, lastName));
+        return status(HttpStatus.OK).body(postService.findPostsByAuthorFirstnameAndLastname(firstName, lastName));
     }
 }

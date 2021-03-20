@@ -27,10 +27,21 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PostService {
 
+    /**
+     * were injected by the constructor using the lombok @AllArgsContrustor annotation
+     */
     private final PostRepository postRepository;
     private final EmployeeRepository employeeRepository;
     private final PostMapper postMapper;
 
+    /**
+     * The method is to retrieve all posts from the database and display them.
+     *
+     * After downloading all the data about the post,
+     * the data is mapped to dto which will display only those needed
+     *
+     * @return list of all posts with specification of data in PostDTO
+     */
     @Transactional(readOnly = true)
     public List<PostDTO> getAllPosts(){
         return postRepository.findAll()
@@ -39,6 +50,19 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * The task of the method is to add a post to the database with the appropriate data.
+     *
+     * The method retrieves the data of the logged in user and
+     * requestbody of the post. The method then sets principal
+     * as author and today's date on the post.
+     * @param post requestbody of the post to be saved
+     * @param principal logged in user
+     *
+     * @throws IllegalStateException if user is not logged in
+     *
+     * @return saving the post to the database
+     */
     public Post addNewPost(Post post, Principal principal) {
         Employee employee = employeeRepository.findByEmail(principal.getName()).orElseThrow(() ->
                 new IllegalStateException("Employee not found"));
@@ -73,6 +97,15 @@ public class PostService {
         }
     }
 
+    /**
+     * The method is to download a specific post from the database and display it.
+     * After downloading all the data about the post,
+     * the data is mapped to dto which will display only those needed
+     *
+     * @param id id of the post to be searched for
+     * @throws ResponseStatusException if the id of the post you are looking for does not exist
+     * @return detailed data about a specific post
+     */
     @Transactional(readOnly = true)
     public PostDTO getPostById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() ->
@@ -80,6 +113,14 @@ public class PostService {
         return postMapper.mapPostToDTO(post);
     }
 
+    /**
+     * The method is to retrieve posts whose authors have the name and surname specified by the user.
+     * After downloading all the data about the post,
+     * the data is mapped to dto which will display only those needed
+     * @param firstName firstname of the author
+     * @param lastName lastname of the author
+     * @return details of specific posts
+     */
     @Transactional(readOnly = true)
     public Set<PostDTO> findPostsByAuthorFirstnameAndLastname(String firstName, String lastName) {
             return postRepository.findPostByAuthorFirstNameAndAuthorLastName(firstName, lastName)
