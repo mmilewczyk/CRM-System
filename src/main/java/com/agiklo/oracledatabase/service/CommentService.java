@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.Comment;
 import com.agiklo.oracledatabase.entity.Employee;
 import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.entity.dto.CommentDTO;
+import com.agiklo.oracledatabase.enums.USER_ROLE;
 import com.agiklo.oracledatabase.mapper.CommentMapper;
 import com.agiklo.oracledatabase.repository.CommentRepository;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
@@ -61,14 +62,28 @@ public class CommentService {
         ));
     }
 
+    /**
+     * the method is to check if the logged in user is the author of the comment or the admin,
+     * if everything is correct, it deletes the selected comment by id.
+     * @param id id of the comment to be deleted
+     * @param principal logged in user
+     * @throws ResponseStatusException if principal is not the author of the comment or the admin throws 403 status with message,
+     *                                 if id of the comment is incorrect throws 404 status with message
+     * @throws IllegalStateException   if user is not logged in
+     */
     public void deleteCommentInPostById(Long id, Principal principal) {
         Comment comment = commentRepository.findById(id).orElseThrow(()->
                 new ResponseStatusException(NOT_FOUND, "Comment cannot be found, the specified id does not exist"));
-        if (comment.getAuthor().getEmail().equals(principal.getName())) {
+        Employee employee = employeeRepository.findByEmail(principal.getName()).orElseThrow(() ->
+                new IllegalStateException("Employee not found"));
+        if(!employee.getUserRole().equals(USER_ROLE.ADMIN)) {
+            if (comment.getAuthor().getEmail().equals(principal.getName())) {
+                commentRepository.deleteById(id);
+            } else {
+                throw new ResponseStatusException(FORBIDDEN, "You are not the author of this comment");
+            }
+        } else {
             commentRepository.deleteById(id);
-        }
-        else {
-            throw new ResponseStatusException(FORBIDDEN, "You are not the author of this comment");
         }
     }
 }

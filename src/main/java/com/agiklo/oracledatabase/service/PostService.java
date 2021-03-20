@@ -55,6 +55,7 @@ public class PostService {
      * @param principal logged in user
      * @throws ResponseStatusException if principal is not the author of the post or the admin throws 403 status with message,
      *                                 if id of the post is incorrect throws 404 status with message
+     * @throws IllegalStateException   if user is not logged in
      */
     public void deletePostById(Long id, Principal principal) {
         Post post = postRepository.findById(id).orElseThrow(()->
