@@ -3,6 +3,7 @@ package com.agiklo.oracledatabase.service;
 import com.agiklo.oracledatabase.entity.Employee;
 import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.entity.dto.PostDTO;
+import com.agiklo.oracledatabase.enums.USER_ROLE;
 import com.agiklo.oracledatabase.mapper.PostMapper;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
@@ -58,11 +59,16 @@ public class PostService {
     public void deletePostById(Long id, Principal principal) {
         Post post = postRepository.findById(id).orElseThrow(()->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Post cannot be found, the specified id does not exist"));
-        if (post.getAuthor().getEmail().equals(principal.getName())){
+        Employee employee = employeeRepository.findByEmail(principal.getName()).orElseThrow(() ->
+                new IllegalStateException("Employee not found"));
+        if(!employee.getUserRole().equals(USER_ROLE.ADMIN)){
+            if (post.getAuthor().getEmail().equals(principal.getName())) {
+                postRepository.deleteById(id);
+            } else {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");
+            }
+        } else {
             postRepository.deleteById(id);
-        }
-        else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");
         }
     }
 
