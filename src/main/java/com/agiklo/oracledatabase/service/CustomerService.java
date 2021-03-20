@@ -19,13 +19,27 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class CustomerService implements CurrentTimeInterface{
 
+    /**
+     * were injected by the constructor using the lombok @AllArgsContrustor annotation
+     */
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
 
+    /**
+     * The method is to retrieve all customers from the database and display them.
+     *
+     * After downloading all the data about the customer,
+     * the data is mapped to dto which will display only those needed
+     * @return list of all customers with specification of data in CustomerDTO
+     */
     @Transactional(readOnly = true)
     public List<CustomerDTO> getAllCustomers(){
         return customerRepository.findAll()
@@ -34,14 +48,31 @@ public class CustomerService implements CurrentTimeInterface{
                 .collect(Collectors.toList());
     }
 
+    /**
+     * The method is to download a specific customer from the database and display it.
+     * After downloading all the data about the customer,
+     * the data is mapped to dto which will display only those needed
+     *
+     * @param id id of the customer to be searched for
+     * @throws ResponseStatusException if the id of the customer you are looking for does not exist throws 404 status
+     * @return detailed data about a specific customer
+     */
     @Transactional(readOnly = true)
     public CustomerDTO getCustomerById(Long id) {
         Customers customer = customerRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer cannot be found, the specified id does not exist"));
+                .orElseThrow(()-> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Customer cannot be found, the specified id does not exist"));
         return customerMapper.mapCustomersToDto(customer);
 
     }
 
+    /**
+     * The method is to retrieve customers whose have the firstname specified by the user.
+     * After downloading all the data about the customer,
+     * the data is mapped to dto which will display only those needed
+     * @param firstName firstname of the customer
+     * @return details of specific customers
+     */
     @Transactional(readOnly = true)
     public Set<CustomerDTO> findCustomersByFirstname(String firstName){
         return customerRepository.findCustomersByFirstnameLike(firstName)
@@ -50,10 +81,20 @@ public class CustomerService implements CurrentTimeInterface{
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * The task of the method is to add a customer to the database.
+     * @param customer requestbody of the customer to be saved
+     * @return saving the customer to the database
+     */
     public Customers addNewCustomer(CustomerDTO customer) {
         return customerRepository.save(customerMapper.mapCustomerDTOtoCustomers(customer));
     }
 
+    /**
+     * Method deletes the selected customer by id
+     * @param id id of the customer to be deleted
+     * @throws ResponseStatusException if id of the customer is incorrect throws 404 status with message
+     */
     public void deleteCustomerById(Long id) {
         try{
             customerRepository.deleteById(id);
@@ -62,6 +103,12 @@ public class CustomerService implements CurrentTimeInterface{
         }
     }
 
+    /**
+     * The purpose of the method is to set the details of the
+     * excel file that will be exported for download and then download it.
+     * @param response response to determine the details of the file
+     * @throws IOException if incorrect data is sent to the file
+     */
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         String headerKey = "Content-Disposition";
@@ -74,6 +121,12 @@ public class CustomerService implements CurrentTimeInterface{
         exporter.export(response);
     }
 
+    /**
+     * The purpose of the method is to set the details of the
+     * pdf file that will be exported for download and then download it.
+     * @param response response to determine the details of the file
+     * @throws IOException if incorrect data is sent to the file
+     */
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
         String headerKey = "Content-Disposition";

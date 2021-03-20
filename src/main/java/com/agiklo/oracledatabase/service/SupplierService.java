@@ -19,13 +19,27 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class SupplierService implements CurrentTimeInterface{
 
+    /**
+     * were injected by the constructor using the lombok @AllArgsContrustor annotation
+     */
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
 
+    /**
+     * The method is to retrieve all suppliers from the database and display them.
+     *
+     * After downloading all the data about the supplier,
+     * the data is mapped to dto which will display only those needed
+     * @return list of all suppliers with specification of data in SupplierToDTO
+     */
     @Transactional(readOnly = true)
     public List<SupplierDTO> getAllSuppliers(){
         return supplierRepository.findAll()
@@ -34,6 +48,15 @@ public class SupplierService implements CurrentTimeInterface{
                 .collect(Collectors.toList());
     }
 
+    /**
+     * The method is to download a specific supplier from the database and display it.
+     * After downloading all the data about the supplier,
+     * the data is mapped to dto which will display only those needed
+     *
+     * @param id id of the supplier to be searched for
+     * @throws ResponseStatusException if the id of the supplier you are looking for does not exist throws 404 status
+     * @return detailed data about a specific supplier
+     */
     @Transactional(readOnly = true)
     public SupplierDTO getSupplierById(Long id) {
         Supplier supplier = supplierRepository.findById(id)
@@ -41,18 +64,34 @@ public class SupplierService implements CurrentTimeInterface{
         return supplierMapper.mapSupplierToDTO(supplier);
     }
 
+    /**
+     * The task of the method is to add a supplier to the database.
+     * @param supplier requestbody of the supplier to be saved
+     * @return saving the supplier to the database
+     */
     public Supplier addNewSuppiler(Supplier supplier){
         return supplierRepository.save(supplier);
     }
 
-    public void deleteSupplierById(Long id) throws NotFoundException {
+    /**
+     * Method deletes the selected supplier by id
+     * @param id id of the supplier to be deleted
+     * @throws ResponseStatusException if id of the supplier is incorrect throws 404 status with message
+     */
+    public void deleteSupplierById(Long id) {
         try {
             supplierRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("The specified id does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The specified id does not exist");
         }
     }
 
+    /**
+     * The purpose of the method is to set the details of the
+     * excel file that will be exported for download and then download it.
+     * @param response response to determine the details of the file
+     * @throws IOException if incorrect data is sent to the file
+     */
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         String headerKey = "Content-Disposition";
@@ -65,6 +104,12 @@ public class SupplierService implements CurrentTimeInterface{
         exporter.export(response);
     }
 
+    /**
+     * The purpose of the method is to set the details of the
+     * pdf file that will be exported for download and then download it.
+     * @param response response to determine the details of the file
+     * @throws IOException if incorrect data is sent to the file
+     */
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
         String headerKey = "Content-Disposition";

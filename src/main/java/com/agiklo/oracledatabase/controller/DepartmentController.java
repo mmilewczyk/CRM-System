@@ -47,7 +47,7 @@ public class DepartmentController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteDepartmentById(@PathVariable("id") Long id) throws NotFoundException {
+    public void deleteDepartmentById(@PathVariable("id") Long id) {
         departmentService.deleteDepartmentById(id);
     }
 

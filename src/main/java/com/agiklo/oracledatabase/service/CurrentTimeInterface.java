@@ -4,6 +4,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * the task of the interface is to set the date in a specific format
+ *
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 public interface CurrentTimeInterface {
 
     default String getCurrentDateTime(){

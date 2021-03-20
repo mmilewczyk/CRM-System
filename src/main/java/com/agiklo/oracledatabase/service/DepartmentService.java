@@ -6,7 +6,6 @@ import com.agiklo.oracledatabase.exports.pdf.ExportDepartmentsToPDF;
 import com.agiklo.oracledatabase.exports.excel.ExportDepartmentsToXLSX;
 import com.agiklo.oracledatabase.mapper.DepartmentMapper;
 import com.agiklo.oracledatabase.repository.DepartmentsRepository;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,27 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class DepartmentService implements CurrentTimeInterface{
 
+    /**
+     * were injected by the constructor using the lombok @AllArgsContrustor annotation
+     */
     private final DepartmentsRepository departmentsRepository;
     private final DepartmentMapper departmentMapper;
 
+    /**
+     * The method is to retrieve all departments from the database and display them.
+     *
+     * After downloading all the data about the department,
+     * the data is mapped to dto which will display only those needed
+     * @return list of all departments with specification of data in DepartmentDTO
+     */
     @Transactional(readOnly = true)
     public List<DepartmentDTO> getAllDepartments(){
         return departmentsRepository.findAll()
@@ -34,6 +47,15 @@ public class DepartmentService implements CurrentTimeInterface{
                 .collect(Collectors.toList());
     }
 
+    /**
+     * The method is to download a specific department from the database and display it.
+     * After downloading all the data about the department,
+     * the data is mapped to dto which will display only those needed
+     *
+     * @param id id of the department to be searched for
+     * @throws ResponseStatusException if the id of the department you are looking for does not exist throws 404 status
+     * @return detailed data about a specific department
+     */
     @Transactional(readOnly = true)
     public DepartmentDTO getDepartmentById(Long id) {
         Departments departments = departmentsRepository.findById(id)
@@ -41,18 +63,34 @@ public class DepartmentService implements CurrentTimeInterface{
         return departmentMapper.mapDepartmentToDto(departments);
     }
 
+    /**
+     * The task of the method is to add a department to the database.
+     * @param department requestbody of the department to be saved
+     * @return saving the department to the database
+     */
     public Departments addNewDepartment(Departments department) {
         return departmentsRepository.save(department);
     }
 
-    public void deleteDepartmentById(Long id) throws NotFoundException {
+    /**
+     * Method deletes the selected department by id
+     * @param id id of the department to be deleted
+     * @throws ResponseStatusException if id of the department is incorrect throws 404 status with message
+     */
+    public void deleteDepartmentById(Long id) {
         try{
             departmentsRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("The specified id does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The specified id does not exist");
         }
     }
 
+    /**
+     * The purpose of the method is to set the details of the
+     * excel file that will be exported for download and then download it.
+     * @param response response to determine the details of the file
+     * @throws IOException if incorrect data is sent to the file
+     */
     public void exportToExcel(HttpServletResponse response) throws IOException{
         response.setContentType("application/vnd.ms-excel");
         String headerKey = "Content-Disposition";
@@ -65,6 +103,12 @@ public class DepartmentService implements CurrentTimeInterface{
         exporter.export(response);
     }
 
+    /**
+     * The purpose of the method is to set the details of the
+     * pdf file that will be exported for download and then download it.
+     * @param response response to determine the details of the file
+     * @throws IOException if incorrect data is sent to the file
+     */
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
         String headerKey = "Content-Disposition";

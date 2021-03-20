@@ -3,7 +3,6 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.Absenteeism;
 import com.agiklo.oracledatabase.entity.dto.AbsenteeismDTO;
 import com.agiklo.oracledatabase.service.AbsenteeismService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class AbsenteeismController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteAbsenteeismById(@PathVariable("id") Long id) throws NotFoundException {
+    public void deleteAbsenteeismById(@PathVariable("id") Long id) {
         absenteeismService.deleteAbsenteeismById(id);
     }
 

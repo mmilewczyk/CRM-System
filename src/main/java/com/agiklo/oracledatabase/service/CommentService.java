@@ -22,15 +22,30 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+/**
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class CommentService {
 
+    /**
+     * were injected by the constructor using the lombok @AllArgsContrustor annotation
+     */
     private final CommentRepository commentRepository;
     private final EmployeeRepository employeeRepository;
     private final PostRepository postRepository;
     private final CommentMapper commentMapper;
 
+    /**
+     * The method is to display all comments that belong to a specific post.
+     *
+     * After downloading all the data about the comment,
+     * the data is mapped to dto which will display only those needed
+     * @param id id of the post to which the comments belong
+     * @return list of all comments with specification of data in CommentDTO
+     */
     @Transactional(readOnly = true)
     public List<CommentDTO> getAllCommentsByPostId(Long id){
         return commentRepository.getCommentsByPost_PostId(id)
@@ -39,6 +54,14 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * The method is to retrieve all comments from the database and display them.
+     *
+     * After downloading all the data about the comment,
+     * the data is mapped to dto which will display only those needed
+     *
+     * @return list of all comments with specification of data in CommentDTO
+     */
     @Transactional(readOnly = true)
     public List<CommentDTO> getAllComments(){
         return commentRepository.findAll()
@@ -47,6 +70,21 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * The task of the method is to add a comment to a specific post.
+     *
+     * The method retrieves the data of the post id, logged in user and
+     * requestbody of the comment. The method then sets post id, principal
+     * as author and today's date on the comment.
+     * @param id id of the post to which the comments belong
+     * @param comment requestbody of the comment to be saved
+     * @param principal logged in user
+     *
+     * @throws IllegalStateException if user is not logged in
+     * @throws ResponseStatusException if post does not exist throws 404 status
+     *
+     * @return saving the comment to the database
+     */
     @Transactional
     public Comment addNewCommentToPost(Long id, Comment comment, Principal principal){
         Post post = postRepository.findById(id).orElseThrow(() ->
