@@ -36,14 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http)
             throws Exception {
         http
-                .csrf().disable()
+                .csrf().disable() //disable only for coding process
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfiguration, secretKey))
                 .addFilterAfter(new JwtUsernameAndPasswordAuthorizationFilter(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class);
-//                .authorizeRequests()
-//                .antMatchers("/registration/**").permitAll();
     }
 
     @Bean

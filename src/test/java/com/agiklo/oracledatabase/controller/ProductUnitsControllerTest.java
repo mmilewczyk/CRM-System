@@ -6,33 +6,29 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-class LoginControllerTest {
+class ProductUnitsControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void shouldLogin() throws Exception {
-        mockMvc.perform(post("/login")
-                .content("{\"username\": \"zofiabrzydal@agiklocrm.com\", \"password\": \"123\"}"))
+    void shouldNoGetProductUnitsAndReturnForbridden() throws Exception {
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/product-units"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+        //then
+        assertThat(mvcResult.getResponse().getErrorMessage()).isEqualTo("Access Denied");
     }
-
-    @Test
-    void shouldNoLogin() throws Exception {
-        mockMvc.perform(post("/login")
-                .content("{\"username\": \"fakeuser@test.com\", \"password\": \"test\"}"))
-                .andDo(print())
-                .andExpect(status().is4xxClientError());
-    }
-
 }

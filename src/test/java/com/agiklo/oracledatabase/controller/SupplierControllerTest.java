@@ -1,11 +1,10 @@
 package com.agiklo.oracledatabase.controller;
 
-import com.agiklo.oracledatabase.entity.Customers;
-import com.agiklo.oracledatabase.entity.dto.CustomerDTO;
-import com.agiklo.oracledatabase.repository.CustomerRepository;
+import com.agiklo.oracledatabase.entity.Supplier;
+import com.agiklo.oracledatabase.entity.dto.SupplierDTO;
+import com.agiklo.oracledatabase.repository.SupplierRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,27 +17,27 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-class CustomerControllerTest {
+class SupplierControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private CustomerRepository customerRepository;
+    private SupplierRepository supplierRepository;
 
     @Test
-    void shouldNoGetCustomersAndReturnForbridden() throws Exception {
+    void shouldNoGetSuppliersAndReturnForbridden() throws Exception {
         //when
-        MvcResult mvcResult = mockMvc.perform(get("/api/v1/customers"))
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/suppliers"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andReturn();
@@ -49,52 +48,48 @@ class CustomerControllerTest {
     @Test
     @Transactional
     @WithMockUser(username = "zofiabrzydal@agiklocrm.com", password = "123", authorities = "EMPLOYEE")
-    void shouldGetCustomerById() throws Exception {
+    void shouldGetSupplierById() throws Exception {
         //given
-        Customers fakeCustomer = prepareCustomerToTest();
-        customerRepository.save(fakeCustomer);
+        Supplier fakeSupplier = prepareSupplierToTest();
+        supplierRepository.save(fakeSupplier);
         //when
-        MvcResult mvcResult = mockMvc.perform(get("/api/v1/customers/" + fakeCustomer.getId()))
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/suppliers/" + fakeSupplier.getSupplierId()))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        //.andExpect(jsonPath("$.firstname", Matchers.is("Kazimiera")));
         //then
-        CustomerDTO customer = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CustomerDTO.class);
-        assertThat(customer).isNotNull();
-        assertThat(customer.getFirstname()).isEqualTo("Vidkun");
-        assertThat(customer.getCity()).isEqualTo("Oslo");
+        SupplierDTO supplier = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), SupplierDTO.class);
+        assertThat(supplier).isNotNull();
+        assertThat(supplier.getSupplierName()).isEqualTo("mitopharma");
+        assertThat(supplier.getActivityStatus()).isEqualTo("A");
     }
 
     @Test
     @WithMockUser(username = "ofiabrzydal@agiklocrm.comz", password = "123", authorities = "EMPLOYEE")
-    void shouldNoGetCustomerById() throws Exception {
+    void shouldNoGetSupplierById() throws Exception {
         //given
-        List<Customers> customers = customerRepository.findAll();
+        List<Supplier> suppliers = supplierRepository.findAll();
         long fakeId;
-        if (customers.isEmpty()) {
+        if (suppliers.isEmpty()) {
             fakeId = 1;}
         else {
-            fakeId = customers.stream()
-                    .mapToLong(Customers::getId)
+            fakeId = suppliers.stream()
+                    .mapToLong(Supplier::getSupplierId)
                     .max()
                     .orElseThrow(NoSuchElementException::new);
         }
         fakeId++;
         //when
-        mockMvc.perform(get("/api/v1/customers/" + fakeId)).andDo(print())
-        //then
-        .andExpect(status().is(404))
-        .andReturn();
+        mockMvc.perform(get("/api/v1/suppliers/" + fakeId)).andDo(print())
+                //then
+                .andExpect(status().is(404))
+                .andReturn();
     }
 
-    Customers prepareCustomerToTest(){
-        Customers newCustomer = new Customers();
-        newCustomer.setFirstname("Vidkun");
-        newCustomer.setLastname("Rikardson");
-        newCustomer.setPesel("97542899482");
-        newCustomer.setCity("Oslo");
-        newCustomer.setZipCode("300-20");
-        return newCustomer;
+    Supplier prepareSupplierToTest(){
+        Supplier newSupplier = new Supplier();
+        newSupplier.setSupplierName("mitopharma");
+        newSupplier.setActivityStatus("A");
+        return newSupplier;
     }
 }

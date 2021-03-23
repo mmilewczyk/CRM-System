@@ -1,8 +1,6 @@
 package com.agiklo.oracledatabase.controller;
 
 import com.agiklo.oracledatabase.entity.*;
-import com.agiklo.oracledatabase.entity.dto.AbsenteeismDTO;
-import com.agiklo.oracledatabase.entity.dto.DepartmentDTO;
 import com.agiklo.oracledatabase.repository.AbsenteeismRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
