@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+/**
+ * the class contains the fields that are required in the registration form
+ */
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode
