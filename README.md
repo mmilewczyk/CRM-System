@@ -13,6 +13,7 @@ System (REST API) that enables the management of suppliers, employees, customers
 - Lombok
 - OpenPDF
 - Apache POI
+- MapStruct
 
 ```
 ⚠️⚠️⚠️
