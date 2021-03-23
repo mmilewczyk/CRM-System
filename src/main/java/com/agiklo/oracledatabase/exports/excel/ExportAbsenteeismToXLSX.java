@@ -13,12 +13,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 @AllArgsConstructor
 public class ExportAbsenteeismToXLSX implements ExcelColumnsHeaderWriter {
 
+    /**
+     * an array that stores the content of the headers in columns
+     */
     private static final String[] columns = {"Id", "Employee Id", "First Name", "Last Name", "Department", "Date from", "Date to", "Reasons"};
     private final List<Absenteeism> absenteeisms;
 
+    /**
+     * The method completes the sheet with data
+     * @param sheet sheet to be filled with data
+     */
     private void writeCellsData(Sheet sheet) {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         int rowNum = 1;
@@ -39,6 +50,11 @@ public class ExportAbsenteeismToXLSX implements ExcelColumnsHeaderWriter {
         }
     }
 
+    /**
+     * The method allows you to create a file and export it
+     * @param response response responsible for the ability to download the file
+     * @throws IOException exception thrown in case of erroneous data
+     */
     public void export(HttpServletResponse response) throws IOException {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         Workbook workbook = new XSSFWorkbook();

@@ -13,11 +13,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Mateusz Milewczyk (agiklo)
+ * @version 1.0
+ */
 @AllArgsConstructor
 public class ExportDepartmentsToXLSX implements ExcelColumnsHeaderWriter {
+
+    /**
+     * an array that stores the content of the headers in columns
+     */
     private static final String[] columns = {"Id", "Department name", "City", "Manager"};
     private final List<Departments> departmentsList;
 
+    /**
+     * The method completes the sheet with data
+     * @param sheet sheet to be filled with data
+     */
     private void writeCellsData(Sheet sheet) {
         int rowNum = 1;
         for (Departments department : departmentsList) {
@@ -34,6 +46,11 @@ public class ExportDepartmentsToXLSX implements ExcelColumnsHeaderWriter {
         }
     }
 
+    /**
+     * The method allows you to create a file and export it
+     * @param response response responsible for the ability to download the file
+     * @throws IOException exception thrown in case of erroneous data
+     */
     public void export(HttpServletResponse response) throws IOException {
         Workbook workbook = new XSSFWorkbook();
 
