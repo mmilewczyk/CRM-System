@@ -21,7 +21,7 @@ Remember to install the Lombok plugin in your IDE, more information in the link 
 github.com/mplushnikov/lombok-intellij-plugin#plugin-installation
 ```
 ```
-docker run -p 8080:8080 docker.io/library/oracledatabase:0.0.1-SNAPSHOT
+docker run -p 8080:8080 --name agiklocrm -d agiklo/crm
 ```
 
 ## Features
