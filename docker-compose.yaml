@@ -8,5 +8,10 @@ services:
     image: postgres
     ports:
      - 5432:5432
+    volumes:
+     - db-data:/var/lib/postgresql/data
     environment:
      - POSTGRES_PASSWORD=root
+volumes:
+  db-data:
+    driver: local
