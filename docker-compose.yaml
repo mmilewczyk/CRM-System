@@ -1,0 +1,17 @@
+version: '3'
+services:
+  agoklocrm:
+    image: agiklo/crm
+    ports:
+     - 8081:8080
+  dev-crmpostgres:
+    image: postgres
+    ports:
+     - 5432:5432
+    volumes:
+     - db-data:/var/lib/postgresql/data
+    environment:
+     - POSTGRES_PASSWORD=root
+volumes:
+  db-data:
+    driver: local
