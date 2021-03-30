@@ -88,6 +88,20 @@ class CustomerControllerTest {
         .andReturn();
     }
 
+    @Test
+    @Transactional
+    @WithMockUser(username = "zofiabrzydal@agiklocrm.com", password = "123", authorities = "EMPLOYEE")
+    void shouldGetCustomersByFirstname() throws Exception {
+        //given
+        Customers fakeCustomer = prepareCustomerToTest();
+        customerRepository.save(fakeCustomer);
+        //when
+        mockMvc.perform(get("/api/v1/customers/?firstname=" + fakeCustomer.getFirstname()))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+    }
+
     Customers prepareCustomerToTest(){
         Customers newCustomer = new Customers();
         newCustomer.setFirstname("Vidkun");
