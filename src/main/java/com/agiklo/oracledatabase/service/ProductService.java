@@ -8,6 +8,7 @@ import com.agiklo.oracledatabase.mapper.ProductMapper;
 import com.agiklo.oracledatabase.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +41,8 @@ public class ProductService implements CurrentTimeInterface{
      * @return list of all products with specification of data in ProductDTO
      */
     @Transactional(readOnly = true)
-    public List<ProductDTO> getAllProducts(){
-        return productRepository.findAll()
+    public List<ProductDTO> getAllProducts(Pageable pageable){
+        return productRepository.findAll(pageable)
                 .stream()
                 .map(productMapper::mapProductToDto)
                 .collect(Collectors.toList());

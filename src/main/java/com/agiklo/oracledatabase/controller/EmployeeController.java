@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.dto.EmployeeDTO;
 import com.agiklo.oracledatabase.service.EmployeeService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,8 +30,8 @@ public class EmployeeController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(){
-        return status(HttpStatus.OK).body(employeeService.getAllEmployees());
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(Pageable pageable){
+        return status(HttpStatus.OK).body(employeeService.getAllEmployees(pageable));
     }
 
     @GetMapping("/{id}")

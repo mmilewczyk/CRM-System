@@ -3,8 +3,8 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.Purchases;
 import com.agiklo.oracledatabase.entity.dto.PurchasesDTO;
 import com.agiklo.oracledatabase.service.PurchasesService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,8 +25,8 @@ public class PurchasesController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<PurchasesDTO>> getAllPurchases(){
-        return status(HttpStatus.OK).body(purchasesService.getAllPurchases());
+    public ResponseEntity<List<PurchasesDTO>> getAllPurchases(Pageable pageable){
+        return status(HttpStatus.OK).body(purchasesService.getAllPurchases(pageable));
     }
 
     @GetMapping("/{id}")
@@ -45,7 +45,7 @@ public class PurchasesController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deletePurchaseById(@PathVariable("id") Long id) throws NotFoundException {
+    public void deletePurchaseById(@PathVariable("id") Long id){
        purchasesService.deletePurchaseById(id);
     }
 }

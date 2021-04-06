@@ -3,6 +3,7 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.dto.PurchasesPositionsDTO;
 import com.agiklo.oracledatabase.service.PurchasesPositionsService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,8 +24,8 @@ public class PurchasesPositionsController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<PurchasesPositionsDTO>> getAllPurchasesPositions(){
-        return status(HttpStatus.OK).body(purchasesPositionsService.getAllPurchasesPositions());
+    public ResponseEntity<List<PurchasesPositionsDTO>> getAllPurchasesPositions(Pageable pageable){
+        return status(HttpStatus.OK).body(purchasesPositionsService.getAllPurchasesPositions(pageable));
     }
 
     @GetMapping("/{id}")

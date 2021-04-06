@@ -8,6 +8,7 @@ import com.agiklo.oracledatabase.mapper.AbsenteeismMapper;
 import com.agiklo.oracledatabase.repository.AbsenteeismRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +41,8 @@ public class AbsenteeismService implements CurrentTimeInterface{
      * @return list of all absenteeisms with specification of data in AbsenteeismsDTO
      */
     @Transactional(readOnly = true)
-    public List<AbsenteeismDTO> getAllAbsenteeisms(){
-        return absenteeismRepository.findAll()
+    public List<AbsenteeismDTO> getAllAbsenteeisms(Pageable pageable){
+        return absenteeismRepository.findAll(pageable)
                 .stream()
                 .map(absenteeismMapper::mapAbsenteeismToDto)
                 .collect(Collectors.toList());

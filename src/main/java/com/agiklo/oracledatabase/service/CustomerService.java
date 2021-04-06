@@ -8,6 +8,7 @@ import com.agiklo.oracledatabase.mapper.CustomerMapper;
 import com.agiklo.oracledatabase.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,8 @@ public class CustomerService implements CurrentTimeInterface{
      * @return list of all customers with specification of data in CustomerDTO
      */
     @Transactional(readOnly = true)
-    public List<CustomerDTO> getAllCustomers(){
-        return customerRepository.findAll()
+    public List<CustomerDTO> getAllCustomers(Pageable pageable){
+        return customerRepository.findAll(pageable)
                 .stream()
                 .map(customerMapper::mapCustomersToDto)
                 .collect(Collectors.toList());

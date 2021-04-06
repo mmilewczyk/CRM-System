@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.dto.ProductUnitsDTO;
 import com.agiklo.oracledatabase.mapper.ProductUnitsMapper;
 import com.agiklo.oracledatabase.repository.ProductUnitsRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +33,8 @@ public class ProductUnitsService {
      * @return list of all ProductUnits with specification of data in ProductUnitsDTO
      */
     @Transactional(readOnly = true)
-    public List<ProductUnitsDTO> getAllProductUnits(){
-        return productUnitsRepository.findAll()
+    public List<ProductUnitsDTO> getAllProductUnits(Pageable pageable){
+        return productUnitsRepository.findAll(pageable)
                 .stream()
                 .map(productUnitsMapper::mapProductUnitsToDTO)
                 .collect(Collectors.toList());

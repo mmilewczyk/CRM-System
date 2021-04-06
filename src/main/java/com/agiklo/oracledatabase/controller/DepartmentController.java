@@ -3,8 +3,8 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.Departments;
 import com.agiklo.oracledatabase.entity.dto.DepartmentDTO;
 import com.agiklo.oracledatabase.service.DepartmentService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,8 +27,8 @@ public class DepartmentController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<DepartmentDTO>> getAllDepartments(){
-        return status(HttpStatus.OK).body(departmentService.getAllDepartments());
+    public ResponseEntity<List<DepartmentDTO>> getAllDepartments(Pageable pageable){
+        return status(HttpStatus.OK).body(departmentService.getAllDepartments(pageable));
     }
 
     @GetMapping("/{id}")

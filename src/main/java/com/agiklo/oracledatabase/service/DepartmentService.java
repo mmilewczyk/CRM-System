@@ -8,6 +8,7 @@ import com.agiklo.oracledatabase.mapper.DepartmentMapper;
 import com.agiklo.oracledatabase.repository.DepartmentsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +41,8 @@ public class DepartmentService implements CurrentTimeInterface{
      * @return list of all departments with specification of data in DepartmentDTO
      */
     @Transactional(readOnly = true)
-    public List<DepartmentDTO> getAllDepartments(){
-        return departmentsRepository.findAll()
+    public List<DepartmentDTO> getAllDepartments(Pageable pageable){
+        return departmentsRepository.findAll(pageable)
                 .stream()
                 .map(departmentMapper::mapDepartmentToDto)
                 .collect(Collectors.toList());

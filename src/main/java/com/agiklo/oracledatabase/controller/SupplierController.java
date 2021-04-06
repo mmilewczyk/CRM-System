@@ -3,8 +3,8 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.Supplier;
 import com.agiklo.oracledatabase.entity.dto.SupplierDTO;
 import com.agiklo.oracledatabase.service.SupplierService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,10 +25,9 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<SupplierDTO>> getAllSuppliers(){
-        return status(HttpStatus.OK).body(supplierService.getAllSuppliers());
+    public ResponseEntity<List<SupplierDTO>> getAllSuppliers(Pageable pageable){
+        return status(HttpStatus.OK).body(supplierService.getAllSuppliers(pageable));
     }
 
     @GetMapping("/{id}")
@@ -47,7 +46,7 @@ public class SupplierController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteSupplierById(@PathVariable("id") Long id) throws NotFoundException {
+    public void deleteSupplierById(@PathVariable("id") Long id){
         supplierService.deleteSupplierById(id);
     }
 

@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.Customers;
 import com.agiklo.oracledatabase.entity.dto.CustomerDTO;
 import com.agiklo.oracledatabase.service.CustomerService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,8 +29,8 @@ public class CustomerController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<CustomerDTO>> getAllCustomers(){
-        return status(HttpStatus.OK).body(customerService.getAllCustomers());
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers(Pageable pageable){
+        return status(HttpStatus.OK).body(customerService.getAllCustomers(pageable));
     }
 
     @GetMapping("/{id}")

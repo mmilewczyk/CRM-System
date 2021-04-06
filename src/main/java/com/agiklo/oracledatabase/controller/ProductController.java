@@ -3,8 +3,8 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.Product;
 import com.agiklo.oracledatabase.entity.dto.ProductDTO;
 import com.agiklo.oracledatabase.service.ProductService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +26,8 @@ public class ProductController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<ProductDTO>> getAllProducts(){
-        return status(HttpStatus.OK).body(productService.getAllProducts());
+    public ResponseEntity<List<ProductDTO>> getAllProducts(Pageable pageable){
+        return status(HttpStatus.OK).body(productService.getAllProducts(pageable));
     }
 
     @GetMapping("/{id}")
@@ -52,7 +52,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProductById(@PathVariable("id") Long id) throws NotFoundException {
+    public void deleteProductById(@PathVariable("id") Long id){
         productService.deleteProductById(id);
     }
 

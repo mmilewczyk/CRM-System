@@ -4,9 +4,9 @@ import com.agiklo.oracledatabase.entity.SellingInvoice;
 import com.agiklo.oracledatabase.entity.dto.SellingInvoiceDTO;
 import com.agiklo.oracledatabase.mapper.SellingInvoiceMapper;
 import com.agiklo.oracledatabase.repository.SellingInvoiceRepository;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +37,8 @@ public class SellingInvoiceService {
      * @return list of all selling invoices with specification of data in SellingInvoiceToDTO
      */
     @Transactional(readOnly = true)
-    public List<SellingInvoiceDTO> getAllSellingInvoices(){
-        return sellingInvoiceRepository.findAll()
+    public List<SellingInvoiceDTO> getAllSellingInvoices(Pageable pageable){
+        return sellingInvoiceRepository.findAll(pageable)
                 .stream()
                 .map(sellingInvoiceMapper::mapSellingInvoiceToDTO)
                 .collect(Collectors.toList());

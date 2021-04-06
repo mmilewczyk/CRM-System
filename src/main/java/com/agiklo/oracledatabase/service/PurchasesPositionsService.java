@@ -5,6 +5,7 @@ import com.agiklo.oracledatabase.entity.dto.PurchasesPositionsDTO;
 import com.agiklo.oracledatabase.mapper.PurchasesPositionsMapper;
 import com.agiklo.oracledatabase.repository.PurchasesPositionsRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +36,8 @@ public class PurchasesPositionsService {
      * @return list of all purchases positions with specification of data in PurchasesPositionsToDTO
      */
     @Transactional(readOnly = true)
-    public List<PurchasesPositionsDTO> getAllPurchasesPositions(){
-        return purchasesPositionsRepository.findAll()
+    public List<PurchasesPositionsDTO> getAllPurchasesPositions(Pageable pageable){
+        return purchasesPositionsRepository.findAll(pageable)
                 .stream()
                 .map(purchasesPositionsMapper::mapPurchasesPositionsToDTO)
                 .collect(Collectors.toList());

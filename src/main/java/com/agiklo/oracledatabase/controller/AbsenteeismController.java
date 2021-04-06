@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.Absenteeism;
 import com.agiklo.oracledatabase.entity.dto.AbsenteeismDTO;
 import com.agiklo.oracledatabase.service.AbsenteeismService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,10 +25,9 @@ public class AbsenteeismController {
     private final AbsenteeismService absenteeismService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<AbsenteeismDTO>> getAllAbsenteeisms(){
-        return status(HttpStatus.OK).body(absenteeismService.getAllAbsenteeisms());
+    public ResponseEntity<List<AbsenteeismDTO>> getAllAbsenteeisms(Pageable pageable){
+        return status(HttpStatus.OK).body(absenteeismService.getAllAbsenteeisms(pageable));
     }
 
     @GetMapping("/{id}")

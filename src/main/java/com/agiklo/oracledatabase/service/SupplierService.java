@@ -6,9 +6,9 @@ import com.agiklo.oracledatabase.exports.excel.ExportSuppliersToXLSX;
 import com.agiklo.oracledatabase.exports.pdf.ExportSuppliersToPDF;
 import com.agiklo.oracledatabase.mapper.SupplierMapper;
 import com.agiklo.oracledatabase.repository.SupplierRepository;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +41,8 @@ public class SupplierService implements CurrentTimeInterface{
      * @return list of all suppliers with specification of data in SupplierToDTO
      */
     @Transactional(readOnly = true)
-    public List<SupplierDTO> getAllSuppliers(){
-        return supplierRepository.findAll()
+    public List<SupplierDTO> getAllSuppliers(Pageable pageable){
+        return supplierRepository.findAll(pageable)
                 .stream()
                 .map(supplierMapper::mapSupplierToDTO)
                 .collect(Collectors.toList());

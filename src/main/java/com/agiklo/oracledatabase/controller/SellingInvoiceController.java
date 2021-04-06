@@ -3,8 +3,8 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.SellingInvoice;
 import com.agiklo.oracledatabase.entity.dto.SellingInvoiceDTO;
 import com.agiklo.oracledatabase.service.SellingInvoiceService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,8 +25,8 @@ public class SellingInvoiceController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<SellingInvoiceDTO>> getAllSellingInvoices(){
-        return status(HttpStatus.OK).body(sellingInvoiceService.getAllSellingInvoices());
+    public ResponseEntity<List<SellingInvoiceDTO>> getAllSellingInvoices(Pageable pageable){
+        return status(HttpStatus.OK).body(sellingInvoiceService.getAllSellingInvoices(pageable));
     }
 
     @GetMapping("/{id}")
@@ -45,7 +45,7 @@ public class SellingInvoiceController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteInvoiceById(@PathVariable("id") Long id) throws NotFoundException {
+    public void deleteInvoiceById(@PathVariable("id") Long id){
         sellingInvoiceService.deleteInvoiceById(id);
     }
 }

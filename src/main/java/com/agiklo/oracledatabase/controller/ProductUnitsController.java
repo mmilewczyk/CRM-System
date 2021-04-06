@@ -3,6 +3,7 @@ package com.agiklo.oracledatabase.controller;
 import com.agiklo.oracledatabase.entity.dto.ProductUnitsDTO;
 import com.agiklo.oracledatabase.service.ProductUnitsService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +23,7 @@ public class ProductUnitsController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<ProductUnitsDTO>> getAllProductUnits(){
-        return status(HttpStatus.OK).body(productUnitsService.getAllProductUnits());
+    public ResponseEntity<List<ProductUnitsDTO>> getAllProductUnits(Pageable pageable){
+        return status(HttpStatus.OK).body(productUnitsService.getAllProductUnits(pageable));
     }
 }

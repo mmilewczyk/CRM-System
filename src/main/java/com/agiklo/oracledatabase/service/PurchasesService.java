@@ -6,6 +6,7 @@ import com.agiklo.oracledatabase.mapper.PurchasesMapper;
 import com.agiklo.oracledatabase.repository.PurchasesRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +37,8 @@ public class PurchasesService {
      * @return list of all purchases with specification of data in PurchasesToDTO
      */
     @Transactional(readOnly = true)
-    public List<PurchasesDTO> getAllPurchases(){
-        return purchasesRepository.findAll()
+    public List<PurchasesDTO> getAllPurchases(Pageable pageable){
+        return purchasesRepository.findAll(pageable)
                 .stream()
                 .map(purchasesMapper::mapPurchasesToDTO)
                 .collect(Collectors.toList());

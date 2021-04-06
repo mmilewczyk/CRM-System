@@ -11,6 +11,7 @@ import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -109,8 +110,8 @@ public class EmployeeService implements UserDetailsService, CurrentTimeInterface
      * @return list of all employees with specification of data in EmployeeDTO
      */
     @Transactional(readOnly = true)
-    public List<EmployeeDTO> getAllEmployees(){
-        return employeeRepository.findAll()
+    public List<EmployeeDTO> getAllEmployees(Pageable pageable){
+        return employeeRepository.findAll(pageable)
                 .stream()
                 .map(employeeMapper::mapEmployeeToDto)
                 .collect(Collectors.toList());
