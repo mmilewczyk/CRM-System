@@ -42,8 +42,11 @@ docker run -p 8080:8080 --name agiklocrm -d agiklo/crm
 - Additional application security by JWT.
 - Internal employee forum where employees can communicate with each other.
 
-## Sample view in Angular
+## 🖌️ Sample view in Angular
 ![Products](https://i.imgur.com/uVT6Xw8_d.webp?maxwidth=1520&fidelity=grand)
+
+## 📄 Sample PDF export
+![ProductsPDF](https://i.imgur.com/LxWxyJm.png)
 
 ## Database diagram<br>
 ![ERD](https://i.imgur.com/YUkRUnR.png)
