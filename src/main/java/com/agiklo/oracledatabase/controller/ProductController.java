@@ -36,10 +36,16 @@ public class ProductController {
         return status(HttpStatus.OK).body(productService.getProductById(id));
     }
 
-    @GetMapping("/")
+    @GetMapping("/name")
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<ProductDTO>> findAllByName(@RequestParam("name") String name) {
-        return status(HttpStatus.OK).body(productService.findAllByName(name));
+    public ResponseEntity<List<ProductDTO>> findAllByName(@RequestParam("name") String name, Pageable pageable) {
+        return status(HttpStatus.OK).body(productService.findAllByName(name, pageable));
+    }
+
+    @GetMapping("/type")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public ResponseEntity<List<ProductDTO>> findAllByProductType(@RequestParam("type") String type, Pageable pageable) {
+        return status(HttpStatus.OK).body(productService.findAllByProductType(type, pageable));
     }
 
     @PostMapping(consumes="application/json")

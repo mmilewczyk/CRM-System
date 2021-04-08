@@ -130,8 +130,23 @@ public class ProductService implements CurrentTimeInterface{
      * @return details of specific products
      */
     @Transactional(readOnly = true)
-    public List<ProductDTO> findAllByName(String name) {
-        return productRepository.findProductsByNameContaining(name)
+    public List<ProductDTO> findAllByName(String name, Pageable pageable) {
+        return productRepository.findProductsByNameContaining(name, pageable)
+                .stream()
+                .map(productMapper::mapProductToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * The method is to retrieve products whose have the type specified by the user.
+     * After downloading all the data about the product,
+     * the data is mapped to dto which will display only those needed
+     * @param productType type of the product
+     * @return details of specific products
+     */
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findAllByProductType(String productType, Pageable pageable){
+        return productRepository.findProductsByProductTypeFullNameContaining(productType, pageable)
                 .stream()
                 .map(productMapper::mapProductToDto)
                 .collect(Collectors.toList());
