@@ -141,11 +141,11 @@ public class EmployeeService implements UserDetailsService, CurrentTimeInterface
      * @return details of specific employee
      */
     @Transactional(readOnly = true)
-    public Set<EmployeeDTO> findEmployeesByFirstname(String firstName) {
-        return employeeRepository.findUserByFirstNameLike(firstName)
+    public List<EmployeeDTO> findEmployeesByFirstname(String firstName, Pageable pageable) {
+        return employeeRepository.findUserByFirstNameContainingIgnoreCase(firstName, pageable)
                 .stream()
                 .map(employeeMapper::mapEmployeeToDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     /**

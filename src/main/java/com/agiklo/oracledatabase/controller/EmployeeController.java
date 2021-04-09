@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.io.IOException;
-import java.util.Set;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -42,8 +41,8 @@ public class EmployeeController {
 
     @GetMapping("/")
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Set<EmployeeDTO>> findEmployeesByFirstname(@RequestParam("firstname") String firstName) {
-        return status(HttpStatus.OK).body(employeeService.findEmployeesByFirstname(firstName));
+    public ResponseEntity<List<EmployeeDTO>> findEmployeesByFirstname(@RequestParam("firstname") String firstName, Pageable pageable) {
+        return status(HttpStatus.OK).body(employeeService.findEmployeesByFirstname(firstName, pageable));
     }
 
     @DeleteMapping("/{id}")
