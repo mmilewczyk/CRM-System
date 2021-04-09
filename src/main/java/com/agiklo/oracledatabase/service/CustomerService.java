@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -75,11 +74,11 @@ public class CustomerService implements CurrentTimeInterface{
      * @return details of specific customers
      */
     @Transactional(readOnly = true)
-    public Set<CustomerDTO> findCustomersByFirstname(String firstName){
-        return customerRepository.findCustomersByFirstnameLike(firstName)
+    public List<CustomerDTO> findCustomersByFirstname(String firstName, Pageable pageable){
+        return customerRepository.findCustomersByFirstnameContainingIgnoreCase(firstName, pageable)
                 .stream()
                 .map(customerMapper::mapCustomersToDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     /**

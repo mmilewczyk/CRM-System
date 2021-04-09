@@ -41,9 +41,9 @@ public class CustomerController {
 
     @GetMapping(path = "/")
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Set<CustomerDTO>> findCustomersByFirstname(
-            @RequestParam("firstname") String firstName){
-        return status(HttpStatus.OK).body(customerService.findCustomersByFirstname(firstName));
+    public ResponseEntity<List<CustomerDTO>> findCustomersByFirstname(
+            @RequestParam("firstname") String firstName, Pageable pageable){
+        return status(HttpStatus.OK).body(customerService.findCustomersByFirstname(firstName, pageable));
     }
 
     @PostMapping(consumes="application/json")
