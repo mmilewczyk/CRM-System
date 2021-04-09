@@ -37,6 +37,12 @@ public class DepartmentController {
         return status(HttpStatus.OK).body(departmentService.getDepartmentById(id));
     }
 
+    @GetMapping("/")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public ResponseEntity<List<DepartmentDTO>> getAllDepartmentsByName(@RequestParam("name") String name, Pageable pageable){
+        return status(HttpStatus.OK).body(departmentService.getAllDepartmentsByName(name, pageable));
+    }
+
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")

@@ -121,4 +121,18 @@ public class DepartmentService implements CurrentTimeInterface{
         ExportDepartmentsToPDF exporter = new ExportDepartmentsToPDF(departmentsList);
         exporter.export(response);
     }
+
+    /**
+     * The method is to retrieve departments whose have the name specified by the user.
+     * After downloading all the data about the department,
+     * the data is mapped to dto which will display only those needed
+     * @param name name of the department
+     * @return details of specific departments
+     */
+    public List<DepartmentDTO> getAllDepartmentsByName(String name, Pageable pageable) {
+        return departmentsRepository.getDepartmentsByDepartmentNameContainingIgnoreCase(name, pageable)
+                .stream()
+                .map(departmentMapper::mapDepartmentToDto)
+                .collect(Collectors.toList());
+    }
 }

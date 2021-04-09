@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-
 
 import static com.agiklo.oracledatabase.controller.ApiMapping.CUSTOMERS_REST_URL;
 import static org.springframework.http.ResponseEntity.*;
