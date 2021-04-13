@@ -86,14 +86,10 @@ public class PostService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Post cannot be found, the specified id does not exist"));
         Employee employee = employeeRepository.findByEmail(principal.getName()).orElseThrow(() ->
                 new IllegalStateException("Employee not found"));
-        if(!employee.getUserRole().equals(USER_ROLE.ADMIN)){
-            if (post.getAuthor().getEmail().equals(principal.getName())) {
-                postRepository.deleteById(id);
-            } else {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");
-            }
-        } else {
+        if(Employee.isAdmin(employee) || isAuthorOfPost(post, principal)){
             postRepository.deleteById(id);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");
         }
     }
 
@@ -127,5 +123,9 @@ public class PostService {
                     .stream()
                     .map(postMapper::mapPostToDTO)
                     .collect(Collectors.toSet());
+    }
+
+    private boolean isAuthorOfPost(Post post, Principal principal){
+        return post.getAuthor().getEmail().equals(principal.getName());
     }
 }
