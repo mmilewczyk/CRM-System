@@ -86,7 +86,7 @@ public class PostService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Post cannot be found, the specified id does not exist"));
         Employee employee = employeeRepository.findByEmail(principal.getName()).orElseThrow(() ->
                 new IllegalStateException("Employee not found"));
-        if(employee.isAdmin(employee) || isAuthorOfPost(post, principal)){
+        if(employee.isAdmin() || isAuthorOfPost(post, principal)){
             postRepository.deleteById(id);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");

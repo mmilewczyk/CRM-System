@@ -84,8 +84,8 @@ public class Employee implements UserDetails {
         return Collections.singletonList(authority);
     }
 
-    public boolean isAdmin(Employee employee){
-        return employee.getUserRole().equals(USER_ROLE.ADMIN);
+    public boolean isAdmin(){
+        return this.getUserRole().equals(USER_ROLE.ADMIN);
     }
 
     @Override
