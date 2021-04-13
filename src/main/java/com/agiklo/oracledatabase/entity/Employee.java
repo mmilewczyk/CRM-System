@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,6 +82,10 @@ public class Employee implements UserDetails {
         SimpleGrantedAuthority authority =
                 new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
+    }
+
+    public static boolean isAdmin(Employee employee){
+        return employee.getUserRole().equals(USER_ROLE.ADMIN);
     }
 
     @Override
