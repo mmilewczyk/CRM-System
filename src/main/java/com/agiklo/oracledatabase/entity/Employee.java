@@ -84,7 +84,7 @@ public class Employee implements UserDetails {
         return Collections.singletonList(authority);
     }
 
-    public static boolean isAdmin(Employee employee){
+    public boolean isAdmin(Employee employee){
         return employee.getUserRole().equals(USER_ROLE.ADMIN);
     }
 

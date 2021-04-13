@@ -114,7 +114,7 @@ public class CommentService {
                 new ResponseStatusException(NOT_FOUND, "Comment cannot be found, the specified id does not exist"));
         Employee employee = employeeRepository.findByEmail(principal.getName()).orElseThrow(() ->
                 new IllegalStateException("Employee not found"));
-        if(Employee.isAdmin(employee) || isAuthorOfComment(comment, principal)) {
+        if(employee.isAdmin(employee) || isAuthorOfComment(comment, principal)) {
             commentRepository.deleteById(id);
         } else {
             throw new ResponseStatusException(FORBIDDEN, "You are not the author of this comment");
