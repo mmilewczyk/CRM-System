@@ -3,7 +3,6 @@ package com.agiklo.oracledatabase.service;
 import com.agiklo.oracledatabase.entity.Employee;
 import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.entity.dto.PostDTO;
-import com.agiklo.oracledatabase.enums.USER_ROLE;
 import com.agiklo.oracledatabase.mapper.PostMapper;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
@@ -125,6 +124,31 @@ public class PostService {
                     .collect(Collectors.toSet());
     }
 
+    /**
+     * Method enabling editing of the selected post, the editor must be the author of the post.
+     * @param post requestbody of the post to be edited
+     * @param principal logged in user
+     * @return edited post
+     */
+    @Transactional
+    public Post editPostContent(Post post, Principal principal){
+        Post editedPost = postRepository.findById(post.getPostId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Post does not exist"));
+        if(isAuthorOfPost(editedPost, principal)) {
+            editedPost.setTitle(post.getTitle());
+            editedPost.setContent(post.getContent());
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");
+        }
+        return editedPost;
+    }
+
+    /**
+     * The method checks if the logged in user is the author of the post.
+     * @param post post whose author is to be checked
+     * @param principal logged in user
+     * @return true if principal is author or false if not
+     */
     private boolean isAuthorOfPost(Post post, Principal principal){
         return post.getAuthor().getEmail().equals(principal.getName());
     }
