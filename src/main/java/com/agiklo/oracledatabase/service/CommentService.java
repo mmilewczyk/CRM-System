@@ -4,7 +4,6 @@ import com.agiklo.oracledatabase.entity.Comment;
 import com.agiklo.oracledatabase.entity.Employee;
 import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.entity.dto.CommentDTO;
-import com.agiklo.oracledatabase.enums.USER_ROLE;
 import com.agiklo.oracledatabase.mapper.CommentMapper;
 import com.agiklo.oracledatabase.repository.CommentRepository;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
@@ -121,6 +120,12 @@ public class CommentService {
         }
     }
 
+    /**
+     * The method checks if the logged in user is the author of the comment.
+     * @param comment comment whose author is to be checked
+     * @param principal logged in user
+     * @return true if principal is author or false if not
+     */
     private boolean isAuthorOfComment(Comment comment, Principal principal){
         return comment.getAuthor().getEmail().equals(principal.getName());
     }
