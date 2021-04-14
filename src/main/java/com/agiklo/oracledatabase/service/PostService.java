@@ -131,7 +131,7 @@ public class PostService {
      * @return edited post
      */
     @Transactional
-    public Post editPostContent(Post post, Principal principal){
+    public PostDTO editPostContent(Post post, Principal principal){
         Post editedPost = postRepository.findById(post.getPostId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Post does not exist"));
         if(isAuthorOfPost(editedPost, principal)) {
@@ -140,7 +140,7 @@ public class PostService {
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this post");
         }
-        return editedPost;
+        return postMapper.mapPostToDTO(editedPost);
     }
 
     /**

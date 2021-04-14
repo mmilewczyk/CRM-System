@@ -45,7 +45,7 @@ public class PostController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Post> editPostContent(@RequestBody Post post, Principal principal){
+    public ResponseEntity<PostDTO> editPostContent(@RequestBody Post post, Principal principal){
         return status(HttpStatus.OK).body(postService.editPostContent(post, principal));
     }
 
