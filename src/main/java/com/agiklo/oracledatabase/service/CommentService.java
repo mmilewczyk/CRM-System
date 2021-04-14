@@ -9,6 +9,7 @@ import com.agiklo.oracledatabase.repository.CommentRepository;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -118,6 +119,24 @@ public class CommentService {
         } else {
             throw new ResponseStatusException(FORBIDDEN, "You are not the author of this comment");
         }
+    }
+
+    /**
+     * Method enabling editing of the selected comment, the editor must be the author of the comment.
+     * @param comment requestbody of the comment to be edited
+     * @param principal logged in user
+     * @return edited comment
+     */
+    @Transactional
+    public CommentDTO editComment(Comment comment, Principal principal){
+        Comment editedComment = commentRepository.findById(comment.getId()).orElseThrow(() ->
+                new ResponseStatusException(NOT_FOUND, "Comment does not exist"));
+        if(isAuthorOfComment(editedComment, principal)) {
+            editedComment.setContent(comment.getContent());
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this comment");
+        }
+        return commentMapper.mapCommentToDTO(editedComment);
     }
 
     /**

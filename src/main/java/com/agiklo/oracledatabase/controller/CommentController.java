@@ -40,6 +40,12 @@ public class CommentController {
         return commentService.addNewCommentToPost(id, comment, principal);
     }
 
+    @PutMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public ResponseEntity<CommentDTO> editComment(@RequestBody Comment comment, Principal principal){
+        return status(HttpStatus.OK).body(commentService.editComment(comment, principal));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
