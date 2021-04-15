@@ -7,6 +7,7 @@ import com.agiklo.oracledatabase.mapper.PostMapper;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +43,8 @@ public class PostService {
      * @return list of all posts with specification of data in PostDTO
      */
     @Transactional(readOnly = true)
-    public List<PostDTO> getAllPosts(){
-        return postRepository.findAll()
+    public List<PostDTO> getAllPosts(Pageable pageable){
+        return postRepository.findAll(pageable)
                 .stream()
                 .map(postMapper::mapPostToDTO)
                 .collect(Collectors.toList());
@@ -117,8 +118,8 @@ public class PostService {
      * @return details of specific posts
      */
     @Transactional(readOnly = true)
-    public Set<PostDTO> findPostsByAuthorFirstnameAndLastname(String firstName, String lastName) {
-            return postRepository.findPostByAuthorFirstNameAndAuthorLastName(firstName, lastName)
+    public Set<PostDTO> findPostsByAuthorFirstnameAndLastname(String firstName, String lastName, Pageable pageable) {
+            return postRepository.findPostByAuthorFirstNameAndAuthorLastName(firstName, lastName, pageable)
                     .stream()
                     .map(postMapper::mapPostToDTO)
                     .collect(Collectors.toSet());

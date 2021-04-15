@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.Post;
 import com.agiklo.oracledatabase.entity.dto.PostDTO;
 import com.agiklo.oracledatabase.service.PostService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +27,8 @@ public class PostController {
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<PostDTO>> getAllPosts(){
-        return status(HttpStatus.OK).body(postService.getAllPosts());
+    public ResponseEntity<List<PostDTO>> getAllPosts(Pageable pageable){
+        return status(HttpStatus.OK).body(postService.getAllPosts(pageable));
     }
 
     @PostMapping(consumes="application/json")
@@ -57,9 +58,10 @@ public class PostController {
 
     @GetMapping(path = "/")
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Set<PostDTO>> findPostsByAuthorFirstnameAndLastname(
+    public ResponseEntity<Set<PostDTO>> getPostsByAuthorFirstnameAndLastname(
             @RequestParam("firstname") String firstName,
-            @RequestParam("lastname") String lastName){
-        return status(HttpStatus.OK).body(postService.findPostsByAuthorFirstnameAndLastname(firstName, lastName));
+            @RequestParam("lastname") String lastName,
+            Pageable pageable){
+        return status(HttpStatus.OK).body(postService.findPostsByAuthorFirstnameAndLastname(firstName, lastName, pageable));
     }
 }
