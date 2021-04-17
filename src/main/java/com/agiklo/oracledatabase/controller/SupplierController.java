@@ -37,7 +37,7 @@ public class SupplierController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<SupplierDTO> editSupplierContent(@RequestBody Supplier supplier){
         return status(HttpStatus.OK).body(supplierService.editSupplier(supplier));
     }

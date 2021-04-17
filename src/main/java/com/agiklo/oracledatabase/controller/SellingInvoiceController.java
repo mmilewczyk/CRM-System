@@ -35,6 +35,12 @@ public class SellingInvoiceController {
         return status(HttpStatus.OK).body(sellingInvoiceService.getInvoiceById(id));
     }
 
+    @PutMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<SellingInvoiceDTO> editSellingInvoice(@RequestBody SellingInvoice sellingInvoice){
+        return status(HttpStatus.OK).body(sellingInvoiceService.editSellingInvoice(sellingInvoice));
+    }
+
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")

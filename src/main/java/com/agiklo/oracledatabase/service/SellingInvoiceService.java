@@ -81,4 +81,16 @@ public class SellingInvoiceService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The specified id does not exist");
         }
     }
+
+    public SellingInvoiceDTO editSellingInvoice(SellingInvoice sellingInvoice) {
+        SellingInvoice editedSellingInvoice = sellingInvoiceRepository.findById(sellingInvoice.getId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Invoice does not exist"));
+        editedSellingInvoice.setInvoiceDate(sellingInvoice.getInvoiceDate());
+        editedSellingInvoice.setGrossValue(sellingInvoice.getGrossValue());
+        editedSellingInvoice.setTaxRate(sellingInvoice.getTaxRate());
+        editedSellingInvoice.setNetWorth(sellingInvoice.getNetWorth());
+        editedSellingInvoice.setCurrency(sellingInvoice.getCurrency());
+        editedSellingInvoice.setCustomer(sellingInvoice.getCustomer());
+        return sellingInvoiceMapper.mapSellingInvoiceToDTO(sellingInvoice);
+    }
 }
