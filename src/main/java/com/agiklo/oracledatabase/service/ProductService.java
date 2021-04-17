@@ -64,6 +64,17 @@ public class ProductService implements CurrentTimeInterface{
         return productMapper.mapProductToDto(product);
     }
 
+    @Transactional
+    public ProductDTO editProduct(Product product){
+        Product editedProduct = productRepository.findById(product.getId())
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product cannot be found"));
+        editedProduct.setName(product.getName());
+        editedProduct.setSellingPrice(product.getSellingPrice());
+        editedProduct.setPurchasePrice(product.getPurchasePrice());
+        editedProduct.setTaxRate(product.getTaxRate());
+        return productMapper.mapProductToDto(editedProduct);
+    }
+
     /**
      * The task of the method is to add a product to the database.
      * @param product requestbody of the customer to be saved

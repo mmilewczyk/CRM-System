@@ -48,6 +48,12 @@ public class ProductController {
         return status(HttpStatus.OK).body(productService.findAllByProductType(type, pageable));
     }
 
+    @PutMapping
+    @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public ResponseEntity<ProductDTO> editProductContent(@RequestBody Product product){
+        return status(HttpStatus.OK).body(productService.editProduct(product));
+    }
+
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
