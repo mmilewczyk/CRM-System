@@ -87,6 +87,19 @@ public class SupplierService implements CurrentTimeInterface{
     }
 
     /**
+     * Method enabling editing name and activicity status of the selected supplier.
+     * @param supplier requestbody of the supplier to be edited
+     * @return edited supplier
+     */
+    public SupplierDTO editSupplier(Supplier supplier){
+        Supplier editedSupplier = supplierRepository.findById(supplier.getSupplierId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Supplier does not exist"));
+        editedSupplier.setSupplierName(supplier.getSupplierName());
+        editedSupplier.setActivityStatus(supplier.getActivityStatus());
+        return supplierMapper.mapSupplierToDTO(editedSupplier);
+    }
+
+    /**
      * The purpose of the method is to set the details of the
      * excel file that will be exported for download and then download it.
      * @param response response to determine the details of the file

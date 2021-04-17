@@ -36,6 +36,12 @@ public class SupplierController {
         return status(HttpStatus.OK).body(supplierService.getSupplierById(id));
     }
 
+    @PutMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public ResponseEntity<SupplierDTO> editSupplierContent(@RequestBody Supplier supplier){
+        return status(HttpStatus.OK).body(supplierService.editSupplier(supplier));
+    }
+
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
