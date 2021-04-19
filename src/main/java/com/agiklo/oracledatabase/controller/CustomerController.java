@@ -44,6 +44,11 @@ public class CustomerController {
         return status(HttpStatus.OK).body(customerService.findCustomersByFirstname(firstName, pageable));
     }
 
+    @PutMapping
+    public ResponseEntity<CustomerDTO> editCustomer(@RequestBody Customers customers){
+        return status(HttpStatus.OK).body(customerService.editCustomer(customers));
+    }
+
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('ADMIN')")

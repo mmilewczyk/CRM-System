@@ -138,4 +138,16 @@ public class CustomerService implements CurrentTimeInterface{
         ExportCustomersToPDF exporter = new ExportCustomersToPDF(customersList);
         exporter.export(response);
     }
+
+    @Transactional
+    public CustomerDTO editCustomer(Customers customers) {
+        Customers editedCustomer = customerRepository.findById(customers.getId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer does not exist"));
+        editedCustomer.setFirstname(customers.getFirstname());
+        editedCustomer.setLastname(customers.getLastname());
+        editedCustomer.setCity(customers.getCity());
+        editedCustomer.setZipCode(customers.getZipCode());
+        editedCustomer.setPesel(customers.getPesel());
+        return customerMapper.mapCustomersToDto(editedCustomer);
+    }
 }
