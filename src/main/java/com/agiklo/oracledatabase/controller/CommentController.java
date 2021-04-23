@@ -4,6 +4,7 @@ import com.agiklo.oracledatabase.entity.Comment;
 import com.agiklo.oracledatabase.entity.dto.CommentDTO;
 import com.agiklo.oracledatabase.service.CommentService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,15 +24,15 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<CommentDTO>> getAllComments(){
-        return status(HttpStatus.OK).body(commentService.getAllComments());
+    //@PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public ResponseEntity<List<CommentDTO>> getAllComments(Pageable pageable){
+        return status(HttpStatus.OK).body(commentService.getAllComments(pageable));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
-    public ResponseEntity<List<CommentDTO>> getAllCommentsByPostId(@PathVariable("id") Long id){
-        return status(HttpStatus.OK).body(commentService.getAllCommentsByPostId(id));
+    //@PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    public ResponseEntity<List<CommentDTO>> getAllCommentsByPostId(@PathVariable("id") Long id, Pageable pageable){
+        return status(HttpStatus.OK).body(commentService.getAllCommentsByPostId(id, pageable));
     }
 
     @PostMapping("/{id}")

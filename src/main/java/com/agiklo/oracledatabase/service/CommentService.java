@@ -9,6 +9,7 @@ import com.agiklo.oracledatabase.repository.CommentRepository;
 import com.agiklo.oracledatabase.repository.EmployeeRepository;
 import com.agiklo.oracledatabase.repository.PostRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,8 +48,8 @@ public class CommentService {
      * @return list of all comments with specification of data in CommentDTO
      */
     @Transactional(readOnly = true)
-    public List<CommentDTO> getAllCommentsByPostId(Long id){
-        return commentRepository.getCommentsByPost_PostId(id)
+    public List<CommentDTO> getAllCommentsByPostId(Long id, Pageable pageable){
+        return commentRepository.getCommentsByPost_PostId(id, pageable)
                 .stream()
                 .map(commentMapper::mapCommentToDTO)
                 .collect(Collectors.toList());
@@ -63,8 +64,8 @@ public class CommentService {
      * @return list of all comments with specification of data in CommentDTO
      */
     @Transactional(readOnly = true)
-    public List<CommentDTO> getAllComments(){
-        return commentRepository.findAll()
+    public List<CommentDTO> getAllComments(Pageable pageable){
+        return commentRepository.findAllBy(pageable)
                 .stream()
                 .map(commentMapper::mapCommentToDTO)
                 .collect(Collectors.toList());
