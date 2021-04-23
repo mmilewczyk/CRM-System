@@ -44,7 +44,7 @@ public class PostService {
      */
     @Transactional(readOnly = true)
     public List<PostDTO> getAllPosts(Pageable pageable){
-        return postRepository.findAll(pageable)
+        return postRepository.findAllBy(pageable)
                 .stream()
                 .map(postMapper::mapPostToDTO)
                 .collect(Collectors.toList());

@@ -25,7 +25,6 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("")
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<PostDTO>> getAllPosts(Pageable pageable){
         return status(HttpStatus.OK).body(postService.getAllPosts(pageable));

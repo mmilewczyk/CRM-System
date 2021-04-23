@@ -24,13 +24,13 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    //@PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<CommentDTO>> getAllComments(Pageable pageable){
         return status(HttpStatus.OK).body(commentService.getAllComments(pageable));
     }
 
     @GetMapping("/{id}")
-    //@PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('MANAGER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<CommentDTO>> getAllCommentsByPostId(@PathVariable("id") Long id, Pageable pageable){
         return status(HttpStatus.OK).body(commentService.getAllCommentsByPostId(id, pageable));
     }
