@@ -42,7 +42,7 @@ public class DepartmentService implements CurrentTimeInterface{
      */
     @Transactional(readOnly = true)
     public List<DepartmentDTO> getAllDepartments(Pageable pageable){
-        return departmentsRepository.findAll(pageable)
+        return departmentsRepository.findAllBy(pageable)
                 .stream()
                 .map(departmentMapper::mapDepartmentToDto)
                 .collect(Collectors.toList());
