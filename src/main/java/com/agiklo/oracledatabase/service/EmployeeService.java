@@ -111,7 +111,7 @@ public class EmployeeService implements UserDetailsService, CurrentTimeInterface
      */
     @Transactional(readOnly = true)
     public List<EmployeeDTO> getAllEmployees(Pageable pageable){
-        return employeeRepository.findAll(pageable)
+        return employeeRepository.findAllBy(pageable)
                 .stream()
                 .map(employeeMapper::mapEmployeeToDto)
                 .collect(Collectors.toList());

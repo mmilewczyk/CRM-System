@@ -42,7 +42,7 @@ public class AbsenteeismService implements CurrentTimeInterface{
      */
     @Transactional(readOnly = true)
     public List<AbsenteeismDTO> getAllAbsenteeisms(Pageable pageable){
-        return absenteeismRepository.findAll(pageable)
+        return absenteeismRepository.findAllBy(pageable)
                 .stream()
                 .map(absenteeismMapper::mapAbsenteeismToDto)
                 .collect(Collectors.toList());
