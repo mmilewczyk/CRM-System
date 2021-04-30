@@ -10,8 +10,8 @@ http://localhost:8080/v2/api-docs
 ```
 
 ## Front-end
-Currently, I started building the frontend part using Angular 11. The repository can be found in the link below.
-https://github.com/agiklo/crm-frontend
+Currently, I started building the frontend part using React. The repository can be found in the link below.
+https://github.com/agiklo/crm-react-frontend
 
 ## Technologies
 - Java 8
