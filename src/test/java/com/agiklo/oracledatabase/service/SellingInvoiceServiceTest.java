@@ -5,6 +5,7 @@ import com.agiklo.oracledatabase.entity.SellingInvoice;
 import com.agiklo.oracledatabase.entity.dto.SellingInvoiceDTO;
 import com.agiklo.oracledatabase.enums.CURRENCY;
 import com.agiklo.oracledatabase.repository.SellingInvoiceRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,7 @@ class SellingInvoiceServiceTest {
 
     @Test
     @Transactional
+    @Disabled
     void shouldGetSellingInvoiceById() {
         SellingInvoice sellingInvoice = prepareInvoiceToTest();
         sellingInvoiceRepository.save(sellingInvoice);

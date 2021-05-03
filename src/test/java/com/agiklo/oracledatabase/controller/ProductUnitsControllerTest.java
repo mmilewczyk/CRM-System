@@ -1,5 +1,6 @@
 package com.agiklo.oracledatabase.controller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +23,7 @@ class ProductUnitsControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    @Disabled
     void shouldNoGetProductUnitsAndReturnForbridden() throws Exception {
         //when
         MvcResult mvcResult = mockMvc.perform(get("/api/v1/product-units"))

@@ -6,6 +6,7 @@ import com.agiklo.oracledatabase.entity.dto.SellingInvoiceDTO;
 import com.agiklo.oracledatabase.enums.CURRENCY;
 import com.agiklo.oracledatabase.repository.SellingInvoiceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,6 +52,7 @@ class SellingInvoiceControllerTest {
 
     @Test
     @Transactional
+    @Disabled
     @WithMockUser(username = "zofiabrzydal@agiklocrm.com", password = "123", authorities = "EMPLOYEE")
     void shouldGetInvoiceById() throws Exception {
         //given
