@@ -23,6 +23,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -33,6 +35,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @ContextConfiguration(classes = {CustomerService.class})
 @ExtendWith(SpringExtension.class)
+@Execution(ExecutionMode.CONCURRENT)
 class CustomerServiceTest {
 
     @MockBean
